@@ -41,15 +41,361 @@
 // INSERT audit log with operation='UPDATE', changed_by=current_user_id
 // Return: { id, employee_code, full_name, email, employee_design }
 
-// POST /api/employees/exit
-// Allowed Roles: hr_executive
-// Check JWT role = 'hr_executive', else return 403
-// Accept: { id, exited_on }
-// Validate: exited_on must be >= joined_on, else return 400 "exited_on must be >= joined_on"
-// Check for active allocations: SELECT COUNT(*) FROM project_allocation WHERE emp_id = ? AND end_date > exited_on
-// If count > 0, return 400 "Employee has active allocations with end_date after exited_on"
-// UPDATE employees SET status = 'EXITED', exited_on = ? WHERE id = ?
-// End allocations: UPDATE project_allocation SET end_date = exited_on WHERE emp_id = ? AND end_date > exited_on
-// Cancel related tasks: UPDATE tasks SET status = 'cancelled' WHERE owner_id = ? AND status != 'complete'
-// INSERT audit log with operation='UPDATE', changed_by=current_user_id
-// Return: { id, employee_code, status, exited_on, allocations_ended: count, tasks_cancelled: count }
+import { NextRequest, NextResponse } from "next/server";
+import { db, schema } from "@/lib/db";
+import { getCurrentUser, checkRole } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit";
+import { toDateString } from "@/lib/date-utils";
+import { checkUniqueness, getCount } from "@/lib/db-helpers";
+import {
+  ErrorResponses,
+  validateRequiredFields,
+  getPaginationParams,
+  successResponse,
+  validateDateOrder,
+} from "@/lib/api-helpers";
+import { eq, and, or, gt, ne, sql, inArray } from "drizzle-orm";
+
+export async function POST(req: NextRequest) {
+  try {
+    const user = await getCurrentUser(req);
+
+    if (!checkRole(user, ["hr_executive"])) {
+      return ErrorResponses.accessDenied();
+    }
+
+    const body = await req.json();
+    const {
+      employee_code,
+      ldap_username,
+      full_name,
+      email,
+      employee_type,
+      employee_role,
+      employee_design,
+      working_location,
+      department_id,
+      project_manager_id,
+      experience_years,
+      resume_url,
+      college,
+      degree,
+      joined_on,
+    } = body;
+
+    // Validate required fields
+    const missingFields = validateRequiredFields(body, [
+      "employee_code",
+      "ldap_username",
+      "full_name",
+      "email",
+      "employee_type",
+      "employee_role",
+      "joined_on",
+    ]);
+    if (missingFields) {
+      return ErrorResponses.badRequest(missingFields);
+    }
+
+    // Check uniqueness
+    const isCodeUnique = await checkUniqueness(
+      schema.employees,
+      schema.employees.employee_code,
+      employee_code,
+    );
+    if (!isCodeUnique) {
+      return ErrorResponses.conflict("employee_code already exists");
+    }
+
+    const isUsernameUnique = await checkUniqueness(
+      schema.employees,
+      schema.employees.ldap_username,
+      ldap_username,
+    );
+    if (!isUsernameUnique) {
+      return ErrorResponses.conflict("ldap_username already exists");
+    }
+
+    // Insert employee
+    const [employee] = await db
+      .insert(schema.employees)
+      .values({
+        employee_code,
+        ldap_username,
+        full_name,
+        email,
+        employee_type,
+        employee_role,
+        employee_design,
+        working_location,
+        department_id,
+        project_manager_id,
+        experience_years: experience_years?.toString(),
+        resume_url,
+        college,
+        degree,
+        status: "ACTIVE",
+        joined_on: toDateString(joined_on)!,
+      })
+      .returning();
+
+    await createAuditLog({
+      entity_type: "EMPLOYEE",
+      entity_id: employee.id,
+      operation: "INSERT",
+      changed_by: user.id,
+      changed_fields: employee,
+    });
+
+    return successResponse(
+      {
+        id: employee.id,
+        employee_code: employee.employee_code,
+        ldap_username: employee.ldap_username,
+        full_name: employee.full_name,
+        email: employee.email,
+        status: employee.status,
+        joined_on: employee.joined_on,
+      },
+      201,
+    );
+  } catch (error) {
+    console.error("Error creating employee:", error);
+    return ErrorResponses.internalError();
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const user = await getCurrentUser(req);
+    const { searchParams } = new URL(req.url);
+    const action = searchParams.get("action");
+
+    // Handle single employee retrieval
+    if (action === "get") {
+      return handleGetEmployee(req, user, searchParams);
+    }
+
+    // Handle list employees
+    return handleListEmployees(req, user, searchParams);
+  } catch (error) {
+    console.error("Error fetching employees:", error);
+    return ErrorResponses.internalError();
+  }
+}
+
+async function handleGetEmployee(
+  req: NextRequest,
+  user: any,
+  searchParams: URLSearchParams,
+) {
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return ErrorResponses.badRequest("Employee id is required");
+  }
+
+  // Check permissions
+  if (user.employee_role === "employee") {
+    if (id !== user.id) {
+      return ErrorResponses.accessDenied();
+    }
+  } else if (user.employee_role === "project_manager") {
+    // Check if viewing self or team member
+    if (id !== user.id) {
+      const managedProjects = await db
+        .select({ id: schema.projects.id })
+        .from(schema.projects)
+        .where(eq(schema.projects.project_manager_id, user.id));
+
+      const projectIds = managedProjects.map((p) => p.id);
+
+      if (projectIds.length > 0) {
+        const [allocation] = await db
+          .select({ emp_id: schema.projectAllocation.emp_id })
+          .from(schema.projectAllocation)
+          .where(
+            and(
+              eq(schema.projectAllocation.emp_id, id),
+              inArray(schema.projectAllocation.project_id, projectIds),
+            ),
+          )
+          .limit(1);
+
+        if (!allocation) {
+          return ErrorResponses.accessDenied();
+        }
+      } else {
+        return ErrorResponses.accessDenied();
+      }
+    }
+  }
+
+  // Fetch employee
+  const [employee] = await db
+    .select()
+    .from(schema.employees)
+    .where(eq(schema.employees.id, id));
+
+  if (!employee) {
+    return ErrorResponses.notFound("Employee");
+  }
+
+  return successResponse(employee);
+}
+
+async function handleListEmployees(
+  req: NextRequest,
+  user: any,
+  searchParams: URLSearchParams,
+) {
+  const status = searchParams.get("status");
+  const department_id = searchParams.get("department_id");
+  const { page, limit, offset } = getPaginationParams(new URL(req.url));
+
+  const whereConditions: any[] = [];
+
+  if (status) {
+    whereConditions.push(eq(schema.employees.status, status as any));
+  }
+
+  if (department_id) {
+    whereConditions.push(eq(schema.employees.department_id, department_id));
+  }
+
+  const whereClause =
+    whereConditions.length > 0 ? and(...whereConditions) : undefined;
+
+  // Get total count
+  const total = await getCount(schema.employees, whereClause);
+
+  // Determine what fields to select based on role
+  const isHrExecutive = user.employee_role === "hr_executive";
+
+  if (isHrExecutive) {
+    // HR Executive gets all fields
+    const employees = await db
+      .select()
+      .from(schema.employees)
+      .where(whereClause)
+      .orderBy(schema.employees.full_name)
+      .limit(limit)
+      .offset(offset);
+
+    return successResponse({ employees, total, page, limit });
+  } else {
+    // Employee and Project Manager get limited fields
+    const employees = await db
+      .select({
+        id: schema.employees.id,
+        employee_code: schema.employees.employee_code,
+        full_name: schema.employees.full_name,
+        email: schema.employees.email,
+        employee_design: schema.employees.employee_design,
+      })
+      .from(schema.employees)
+      .where(whereClause)
+      .orderBy(schema.employees.full_name)
+      .limit(limit)
+      .offset(offset);
+
+    return successResponse({ employees, total, page, limit });
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const user = await getCurrentUser(req);
+
+    if (!checkRole(user, ["hr_executive"])) {
+      return ErrorResponses.accessDenied();
+    }
+
+    const body = await req.json();
+    const {
+      id,
+      employee_code,
+      ldap_username,
+      full_name,
+      email,
+      employee_type,
+      employee_role,
+      employee_design,
+      working_location,
+      department_id,
+      project_manager_id,
+      experience_years,
+      resume_url,
+      college,
+      degree,
+    } = body;
+
+    if (!id) {
+      return ErrorResponses.badRequest("Employee id is required");
+    }
+
+    // Prevent updating immutable fields
+    if (employee_code !== undefined) {
+      return ErrorResponses.badRequest("Cannot update employee_code");
+    }
+
+    if (ldap_username !== undefined) {
+      return ErrorResponses.badRequest("Cannot update ldap_username");
+    }
+
+    // Check if employee exists
+    const [existing] = await db
+      .select()
+      .from(schema.employees)
+      .where(eq(schema.employees.id, id));
+
+    if (!existing) {
+      return ErrorResponses.notFound("Employee");
+    }
+
+    // Build update data
+    const updateData: any = { updated_at: new Date() };
+
+    if (full_name !== undefined) updateData.full_name = full_name;
+    if (email !== undefined) updateData.email = email;
+    if (employee_type !== undefined) updateData.employee_type = employee_type;
+    if (employee_role !== undefined) updateData.employee_role = employee_role;
+    if (employee_design !== undefined)
+      updateData.employee_design = employee_design;
+    if (working_location !== undefined)
+      updateData.working_location = working_location;
+    if (department_id !== undefined) updateData.department_id = department_id;
+    if (project_manager_id !== undefined)
+      updateData.project_manager_id = project_manager_id;
+    if (experience_years !== undefined)
+      updateData.experience_years = experience_years.toString();
+    if (resume_url !== undefined) updateData.resume_url = resume_url;
+    if (college !== undefined) updateData.college = college;
+    if (degree !== undefined) updateData.degree = degree;
+
+    const [updated] = await db
+      .update(schema.employees)
+      .set(updateData)
+      .where(eq(schema.employees.id, id))
+      .returning();
+
+    await createAuditLog({
+      entity_type: "EMPLOYEE",
+      entity_id: id,
+      operation: "UPDATE",
+      changed_by: user.id,
+      changed_fields: updateData,
+    });
+
+    return successResponse({
+      id: updated.id,
+      employee_code: updated.employee_code,
+      full_name: updated.full_name,
+      email: updated.email,
+      employee_design: updated.employee_design,
+    });
+  } catch (error) {
+    console.error("Error updating employee:", error);
+    return ErrorResponses.internalError();
+  }
+}
