@@ -1,11 +1,14 @@
 // POST /api/demands/create
 // Allowed Roles: project_manager, hr_executive
-// Accept: { project_id, role_required, skills_required, start_date }
+// Accept: { project_id, role_required, skill_ids: string[], start_date }
 // Validation:
 //   - project_manager: Can create WHERE project_id IN (SELECT id FROM projects WHERE project_manager_id = current_user_id), else return 403 "Access denied. Not your project"
 //   - hr_executive: Can create for any project
-// INSERT into resource_demands table with requested_by = current_user_id, demand_status = 'REQUESTED'
-// Return: { id, project_id, role_required, skills_required, start_date, requested_by, demand_status, created_at }
+//   - skill_ids must be array of valid skill IDs
+// Transaction:
+//   1. INSERT into resource_demands table with requested_by = current_user_id, demand_status = 'REQUESTED'
+//   2. For each skill_id in skill_ids: INSERT into demand_skills (demand_id, skill_id)
+// Return: { id, project_id, role_required, skill_ids, start_date, requested_by, demand_status, created_at }
 
 // GET /api/demands/list
 // Allowed Roles: project_manager, hr_executive
@@ -16,9 +19,10 @@
 // SELECT * FROM resource_demands WHERE filters applied
 // JOIN projects table to get project_code, project_name
 // JOIN employees table to get requested_by_name (full_name)
-// Parse skills_required comma-separated IDs and JOIN skills table to get skill names array
+// JOIN demand_skills and skills tables to get skill names array
+//   - SELECT ds.demand_id, array_agg(s.skill_name) as skill_names FROM demand_skills ds JOIN skills s ON ds.skill_id = s.id GROUP BY ds.demand_id
 // Apply pagination using LIMIT and OFFSET
-// Return: { demands: [{ id, project_id, project_code, project_name, role_required, skills_required, skill_names, start_date, requested_by, requested_by_name, demand_status, created_at }], total, page, limit }
+// Return: { demands: [{ id, project_id, project_code, project_name, role_required, skill_names, start_date, requested_by, requested_by_name, demand_status, created_at }], total, page, limit }
 
 // GET /api/demands/get
 // Allowed Roles: project_manager, hr_executive
@@ -29,20 +33,23 @@
 // SELECT * FROM resource_demands WHERE id = ?
 // JOIN projects table to get project_code, project_name
 // JOIN employees table to get requested_by_name (full_name)
-// Parse skills_required comma-separated IDs and JOIN skills table to get skill names array
-// Return: { id, project_id, project_code, project_name, role_required, skills_required, skill_names, start_date, requested_by, requested_by_name, demand_status, created_at }
+// JOIN demand_skills and skills tables to get skill names array
+// Return: { id, project_id, project_code, project_name, role_required, skill_names, start_date, requested_by, requested_by_name, demand_status, created_at }
 // Error 403 if access denied
 // Error 404 if demand not found
 
 // PUT /api/demands/update
 // Allowed Roles: project_manager (only if demand_status = 'REQUESTED')
-// Accept: { id, role_required, skills_required, start_date }
+// Accept: { id, role_required, skill_ids: string[], start_date }
 // Get demand: SELECT requested_by, demand_status FROM resource_demands WHERE id = ?
 // Validation:
 //   - project_manager: Can update WHERE requested_by = current_user_id AND demand_status = 'REQUESTED', else return 403 "Cannot edit demand after HR review"
 //   - demand_status must be 'REQUESTED', else return 400 "Cannot edit demand. Status: FULFILLED/CANCELLED"
-// UPDATE resource_demands SET role_required = ?, skills_required = ?, start_date = ? WHERE id = ?
-// Return: { id, role_required, skills_required, start_date }
+// Transaction:
+//   1. UPDATE resource_demands SET role_required = ?, start_date = ? WHERE id = ?
+//   2. DELETE FROM demand_skills WHERE demand_id = ?
+//   3. For each skill_id in skill_ids: INSERT into demand_skills (demand_id, skill_id)
+// Return: { id, role_required, skill_ids, start_date }
 // Error 403 if access denied
 
 // POST /api/demands/approve

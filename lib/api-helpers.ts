@@ -165,3 +165,52 @@ export function getAllowedStatusTransitions(
     PROJECT_STATUS_TRANSITIONS[roleKey][currentStatus as ProjectStatus] || []
   );
 }
+
+/**
+ * Build audit log filters from query parameters
+ * Returns array of Drizzle ORM filter conditions
+ */
+export function buildAuditFilters(searchParams: URLSearchParams, schema: any) {
+  const filters: any[] = [];
+
+  // Filter by entity_type
+  const entity_type = searchParams.get("entity_type");
+  if (entity_type) {
+    filters.push(schema.eq(schema.auditLogs.entity_type, entity_type));
+  }
+
+  // Filter by entity_id
+  const entity_id = searchParams.get("entity_id");
+  if (entity_id) {
+    filters.push(schema.eq(schema.auditLogs.entity_id, entity_id));
+  }
+
+  // Filter by operation
+  const operation = searchParams.get("operation");
+  if (operation) {
+    filters.push(schema.eq(schema.auditLogs.operation, operation));
+  }
+
+  // Filter by changed_by
+  const changed_by = searchParams.get("changed_by");
+  if (changed_by) {
+    filters.push(schema.eq(schema.auditLogs.changed_by, changed_by));
+  }
+
+  // Filter by date range
+  const start_date = searchParams.get("start_date");
+  const end_date = searchParams.get("end_date");
+
+  if (start_date) {
+    filters.push(schema.gte(schema.auditLogs.changed_at, new Date(start_date)));
+  }
+
+  if (end_date) {
+    // Add one day to include the entire end_date
+    const endDateTime = new Date(end_date);
+    endDateTime.setDate(endDateTime.getDate() + 1);
+    filters.push(schema.lt(schema.auditLogs.changed_at, endDateTime));
+  }
+
+  return filters;
+}

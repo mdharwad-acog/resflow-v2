@@ -35,11 +35,31 @@ export const demandStatusEnum = pgEnum("demand_status", [
   "CANCELLED",
 ]);
 export const reportTypeEnum = pgEnum("report_type", ["DAILY", "WEEKLY"]);
-export const taskStatusEnum = pgEnum("task_status", [
-  "pending",
-  "in_progress",
-  "complete",
-  "cancelled",
+export const taskStatusEnum = pgEnum("task_status", ["DUE", "COMPLETED"]);
+export const entityTypeEnum = pgEnum("entity_type", [
+  "EMPLOYEE",
+  "DEPARTMENT",
+  "CLIENT",
+  "PROJECT",
+  "PROJECT_ALLOCATION",
+  "SKILL",
+  "EMPLOYEE_SKILL",
+  "DEMAND",
+  "DEMAND_SKILL",
+  "REPORT",
+  "TASK",
+  "PHASE",
+  "PHASE_REPORT",
+  "DAILY_PROJECT_LOG",
+  "ATTRIBUTE",
+  "ATTRIBUTE_VALUE",
+]);
+export const attributeDataTypeEnum = pgEnum("attribute_data_type", [
+  "STRING",
+  "INT",
+  "DECIMAL",
+  "BOOLEAN",
+  "DATE",
 ]);
 
 // Employees Table
@@ -174,10 +194,11 @@ export const tasks = pgTable("tasks", {
   id: uuid("id").defaultRandom().primaryKey(),
   owner_id: uuid("owner_id").notNull(),
   entity_id: uuid("entity_id").notNull(),
-  status: taskStatusEnum("status").notNull().default("pending"),
+  entity_type: entityTypeEnum("entity_type").notNull(),
+  description: text("description"),
+  status: taskStatusEnum("status").notNull().default("DUE"),
   due_on: date("due_on"),
   assigned_by: uuid("assigned_by").notNull(),
-  completed_at: timestamp("completed_at"),
   created_at: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -202,10 +223,52 @@ export const phaseReports = pgTable("phase_report", {
 // Audit Logs Table
 export const auditLogs = pgTable("audit_logs", {
   id: uuid("id").defaultRandom().primaryKey(),
-  entity_type: varchar("entity_type", { length: 50 }).notNull(),
+  entity_type: entityTypeEnum("entity_type").notNull(),
   entity_id: uuid("entity_id").notNull(),
   operation: varchar("operation", { length: 20 }).notNull(), // INSERT, UPDATE, DELETE
   changed_by: uuid("changed_by").notNull(),
   changed_at: timestamp("changed_at").defaultNow().notNull(),
   changed_fields: jsonb("changed_fields"),
+});
+
+// Daily Project Logs Table (for temporary daily work tracking)
+export const dailyProjectLogs = pgTable("daily_project_logs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  emp_id: uuid("emp_id").notNull(),
+  project_id: uuid("project_id").notNull(),
+  log_date: date("log_date").notNull(),
+  hours: decimal("hours", { precision: 4, scale: 2 }).notNull(),
+  notes: text("notes"),
+  locked: boolean("locked").notNull().default(false),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Demand Skills Table (many-to-many relationship)
+export const demandSkills = pgTable("demand_skills", {
+  demand_id: uuid("demand_id").notNull(),
+  skill_id: uuid("skill_id").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Flexible Schema - Attributes Table
+export const attributes = pgTable("attributes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  entity_type: entityTypeEnum("entity_type").notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  data_type: attributeDataTypeEnum("data_type").notNull(),
+  is_required: boolean("is_required").notNull().default(false),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Flexible Schema - Attribute Values Table
+export const attributeValues = pgTable("attribute_values", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  entity_id: uuid("entity_id").notNull(),
+  attribute_id: uuid("attribute_id").notNull(),
+  value_string: varchar("value_string", { length: 255 }),
+  value_int: decimal("value_int", { precision: 10, scale: 0 }),
+  value_decimal: decimal("value_decimal", { precision: 15, scale: 4 }),
+  value_bool: boolean("value_bool"),
+  value_date: date("value_date"),
+  created_at: timestamp("created_at").defaultNow().notNull(),
 });
