@@ -9,26 +9,29 @@
 // INSERT audit logs for both UPDATE and INSERT operations with changed_by=current_user_id
 // Return: { old_allocation: { id, end_date }, new_allocation: { id, emp_id, project_id, role, allocation_percentage, start_date, end_date, billability, is_critical_resource, assigned_by } }
 
-import { NextRequest, NextResponse } from 'next/server';
-import { db, schema } from '@/lib/db';
-import { getCurrentUser, checkRole } from '@/lib/auth';
-import { createAuditLog } from '@/lib/audit';
-import { toDateString } from '@/lib/date-utils';
-import { eq } from 'drizzle-orm';
+import { NextRequest, NextResponse } from "next/server";
+import { db, schema } from "@/lib/db";
+import { getCurrentUser, checkRole } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit";
+import { toDateString } from "@/lib/date-utils";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
-    
-    if (!checkRole(user, ['hr_executive'])) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+
+    if (!checkRole(user, ["hr_executive"])) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
     const body = await req.json();
     const { allocation_id, new_project_id, transfer_date } = body;
 
     if (!allocation_id || !new_project_id || !transfer_date) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
     const transferDateStr = toDateString(transfer_date)!;
@@ -39,12 +42,20 @@ export async function POST(req: NextRequest) {
       .where(eq(schema.projectAllocation.id, allocation_id));
 
     if (!oldAllocation) {
-      return NextResponse.json({ error: 'Allocation not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: "Allocation not found" },
+        { status: 404 },
+      );
     }
 
-    // Compare date strings directly (YYYY-MM-DD format)
-    if (transferDateStr < oldAllocation.start_date || (oldAllocation.end_date && transferDateStr > oldAllocation.end_date)) {
-      return NextResponse.json({ error: 'transfer_date must be between start_date and end_date' }, { status: 400 });
+    if (
+      transferDateStr < oldAllocation.start_date ||
+      (oldAllocation.end_date && transferDateStr > oldAllocation.end_date)
+    ) {
+      return NextResponse.json(
+        { error: "transfer_date must be between start_date and end_date" },
+        { status: 400 },
+      );
     }
 
     // Use Drizzle transaction
@@ -66,35 +77,38 @@ export async function POST(req: NextRequest) {
           end_date: oldAllocation.end_date,
           billability: oldAllocation.billability,
           is_critical_resource: oldAllocation.is_critical_resource,
-          assigned_by: user.id
+          assigned_by: user.id,
         })
         .returning();
 
       await createAuditLog({
-        entity_type: 'ALLOCATION',
+        entity_type: "PROJECT_ALLOCATION",
         entity_id: allocation_id,
-        operation: 'UPDATE',
+        operation: "UPDATE",
         changed_by: user.id,
-        changed_fields: { end_date: transferDateStr }
+        changed_fields: { end_date: transferDateStr },
       });
 
       await createAuditLog({
-        entity_type: 'ALLOCATION',
+        entity_type: "PROJECT_ALLOCATION",
         entity_id: newAllocation.id,
-        operation: 'INSERT',
+        operation: "INSERT",
         changed_by: user.id,
-        changed_fields: newAllocation
+        changed_fields: newAllocation,
       });
 
-      return { 
-        old_allocation: { id: updated.id, end_date: updated.end_date }, 
-        new_allocation: newAllocation 
+      return {
+        old_allocation: { id: updated.id, end_date: updated.end_date },
+        new_allocation: newAllocation,
       };
     });
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    console.error('Error transferring allocation:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error("Error transferring allocation:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
