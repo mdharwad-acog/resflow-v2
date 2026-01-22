@@ -7,7 +7,7 @@
 // If count > 0, return 400 "Employee has active allocations with end_date after exited_on"
 // UPDATE employees SET status = 'EXITED', exited_on = ? WHERE id = ?
 // End allocations: UPDATE project_allocation SET end_date = exited_on WHERE emp_id = ? AND end_date > exited_on
-// Cancel related tasks: UPDATE tasks SET status = 'cancelled' WHERE owner_id = ? AND status != 'complete'
+// Delete incomplete tasks: DELETE FROM tasks WHERE owner_id = ? AND status = 'DUE'
 // INSERT audit log with operation='UPDATE', changed_by=current_user_id
 // Return: { id, employee_code, status, exited_on, allocations_ended: count, tasks_cancelled: count }
 
@@ -101,15 +101,11 @@ export async function POST(req: NextRequest) {
         )
         .returning();
 
-      // Cancel tasks that are not complete
+      // Cancel tasks that are not completed (only DUE tasks remain)
       const cancelledTasks = await tx
-        .update(schema.tasks)
-        .set({ status: "cancelled" })
+        .delete(schema.tasks)
         .where(
-          and(
-            eq(schema.tasks.owner_id, id),
-            ne(schema.tasks.status, "complete"),
-          ),
+          and(eq(schema.tasks.owner_id, id), eq(schema.tasks.status, "DUE")),
         )
         .returning();
 

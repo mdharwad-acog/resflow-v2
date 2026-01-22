@@ -1,67 +1,181 @@
-// POST /api/skills/create
-// Allowed Roles: hr_executive
-// Check JWT role = 'hr_executive', else return 403
-// Accept: { skill_name, skill_department }
-// Check skill_name uniqueness: SELECT 1 FROM skills WHERE skill_name = ?
-// If exists, return 400 "skill_name already exists"
-// INSERT into skills table
-// Return: { skill_id, skill_name, skill_department, created_at }
+import { NextRequest, NextResponse } from "next/server";
+import { db, schema } from "@/lib/db";
+import { getCurrentUser, checkRole } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit";
+import {
+  checkUniqueness,
+  getPMTeamMemberIds,
+  isInPMTeam,
+  getCount,
+} from "@/lib/db-helpers";
+import {
+  ErrorResponses,
+  validateRequiredFields,
+  successResponse,
+} from "@/lib/api-helpers";
+import { eq, and, isNull, sql } from "drizzle-orm";
 
-// GET /api/skills/list
-// Allowed Roles: employee, project_manager, hr_executive
-// Query params: skill_department, page, limit
-// SELECT * FROM skills WHERE filters applied
-// Apply pagination using LIMIT and OFFSET
-// Return: { skills: [{ skill_id, skill_name, skill_department, created_at }], total, page, limit }
+// POST /api/skills/create - Create new skill
+async function handleCreate(req: NextRequest) {
+  const user = await getCurrentUser(req);
 
-// DELETE /api/skills/delete
-// Allowed Roles: hr_executive
-// Check JWT role = 'hr_executive', else return 403
-// Accept: { skill_id }
-// Check if skill is assigned: SELECT COUNT(*) FROM employee_skills WHERE skill_id = ?
-// If count > 0, return 400 "Cannot delete skill. Assigned to X employees"
-// DELETE FROM skills WHERE skill_id = ?
-// INSERT audit log with operation='DELETE', changed_by=current_user_id
-// Return: { message: "Skill deleted successfully" }
+  if (!checkRole(user, ["hr_executive"])) {
+    return ErrorResponses.accessDenied();
+  }
 
-// POST /api/skills/request
-// Allowed Roles: employee, project_manager, hr_executive
-// Accept: { emp_id, skill_id, proficiency_level }
-// Validation:
-//   - employee/project_manager: Can request WHERE emp_id = current_user_id, else return 403
-//   - hr_executive: Can request for any employee
-// Check if already exists: SELECT 1 FROM employee_skills WHERE emp_id = ? AND skill_id = ?
-// If exists, return 400 "Skill already requested or approved for this employee"
-// INSERT INTO employee_skills (skill_id, emp_id, proficiency_level, approved_by, approved_at) VALUES (?, ?, ?, NULL, NULL)
-// Return: { id, emp_id, skill_id, proficiency_level, status: 'PENDING', created_at }
+  const body = await req.json();
+  const { skill_name, skill_department } = body;
 
-// POST /api/skills/approve
-// Allowed Roles: project_manager, hr_executive
-// Accept: { employee_skill_id, action: "approve" | "reject" }
-// Get employee_skill: SELECT emp_id, approved_by, approved_at FROM employee_skills WHERE id = employee_skill_id
-// Validation:
-//   - Status must be PENDING (approved_by IS NULL AND approved_at IS NULL), else return 400 "Skill already processed"
-//   - project_manager: Can approve WHERE emp_id IN (SELECT emp_id FROM project_allocation WHERE project_id IN (SELECT id FROM projects WHERE project_manager_id = current_user_id)), else return 403 "Cannot approve skills for non-team members"
-//   - hr_executive: Can approve for any employee
-// If action = "approve":
-//   - UPDATE employee_skills SET approved_by = current_user_id, approved_at = CURRENT_DATE WHERE id = employee_skill_id
-//   - INSERT audit log with operation='UPDATE', changed_by=current_user_id
-//   - Return: { id, emp_id, skill_id, proficiency_level, approved_by, approved_at, status: 'APPROVED' }
-// If action = "reject":
-//   - DELETE FROM employee_skills WHERE id = employee_skill_id
-//   - INSERT audit log with operation='DELETE', changed_by=current_user_id
-//   - Return: { message: "Skill request rejected" }
-// Error 403 if access denied
+  // Validate required fields
+  const missingFields = validateRequiredFields(body, [
+    "skill_name",
+    "skill_department",
+  ]);
+  if (missingFields) {
+    return ErrorResponses.badRequest(missingFields);
+  }
 
-// GET /api/skills/employee
-// Allowed Roles: employee, project_manager, hr_executive
-// Query param: emp_id (required)
-// Data Filtering:
-//   - employee: Can view WHERE emp_id = current_user_id, else return 403
-//   - project_manager: Can view WHERE emp_id = current_user_id OR emp_id IN team, else return 403
-//   - hr_executive: Can view any employee's skills
-// SELECT * FROM employee_skills WHERE emp_id = ?
-// JOIN skills table to get skill_name, skill_department
-// Compute status: IF approved_by IS NULL AND approved_at IS NULL THEN 'PENDING' ELSE 'APPROVED'
-// Return: { employee_skills: [{ id, emp_id, skill_id, skill_name, skill_department, proficiency_level, approved_by, approved_at, status }] }
-// Error 403 if access denied
+  // Check uniqueness
+  const exists = await checkUniqueness(schema.skills, "skill_name", skill_name);
+  if (exists) {
+    return ErrorResponses.badRequest("skill_name already exists");
+  }
+
+  // Insert skill
+  const [skill] = await db
+    .insert(schema.skills)
+    .values({
+      skill_name,
+      skill_department,
+    })
+    .returning();
+
+  // Create audit log
+  await createAuditLog({
+    entity_type: "SKILL",
+    entity_id: skill.skill_id,
+    operation: "INSERT",
+    changed_by: user.id,
+    changed_fields: {
+      skill_name,
+      skill_department,
+    },
+  });
+
+  return successResponse(
+    {
+      skill_id: skill.skill_id,
+      skill_name: skill.skill_name,
+      skill_department: skill.skill_department,
+      created_at: skill.created_at,
+    },
+    201,
+  );
+}
+
+// GET /api/skills/list - List all skills with pagination
+async function handleList(req: NextRequest) {
+  await getCurrentUser(req); // Verify authentication
+
+  const { searchParams } = new URL(req.url);
+  const skill_department = searchParams.get("skill_department");
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "10");
+  const offset = (page - 1) * limit;
+
+  // Build where clause
+  const whereClause = skill_department
+    ? eq(schema.skills.skill_department, skill_department)
+    : undefined;
+
+  // Get total count
+  const total = await getCount(schema.skills, whereClause);
+
+  // Get skills with pagination
+  const query = db.select().from(schema.skills).limit(limit).offset(offset);
+
+  const skills = whereClause ? await query.where(whereClause) : await query;
+
+  return successResponse({ skills, total, page, limit });
+}
+
+// DELETE /api/skills/delete - Delete skill
+async function handleDelete(req: NextRequest) {
+  const user = await getCurrentUser(req);
+
+  if (!checkRole(user, ["hr_executive"])) {
+    return ErrorResponses.accessDenied();
+  }
+
+  const body = await req.json();
+  const { skill_id } = body;
+
+  // Validate required fields
+  const missingFields = validateRequiredFields(body, ["skill_id"]);
+  if (missingFields) {
+    return ErrorResponses.badRequest(missingFields);
+  }
+
+  // Check if skill exists
+  const [existingSkill] = await db
+    .select()
+    .from(schema.skills)
+    .where(eq(schema.skills.skill_id, skill_id));
+
+  if (!existingSkill) {
+    return ErrorResponses.notFound("Skill");
+  }
+
+  // Check if skill is assigned to employees
+  const [{ count }] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(schema.employeeSkills)
+    .where(eq(schema.employeeSkills.skill_id, skill_id));
+
+  if (count > 0) {
+    return ErrorResponses.badRequest(
+      `Cannot delete skill. Assigned to ${count} employees`,
+    );
+  }
+
+  // Delete skill
+  await db.delete(schema.skills).where(eq(schema.skills.skill_id, skill_id));
+
+  // Create audit log
+  await createAuditLog({
+    entity_type: "SKILL",
+    entity_id: skill_id,
+    operation: "DELETE",
+    changed_by: user.id,
+    changed_fields: {},
+  });
+
+  return successResponse({ message: "Skill deleted successfully" });
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    return await handleCreate(req);
+  } catch (error) {
+    console.error("Error creating skill:", error);
+    return ErrorResponses.internalError();
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    return await handleList(req);
+  } catch (error) {
+    console.error("Error fetching skills:", error);
+    return ErrorResponses.internalError();
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    return await handleDelete(req);
+  } catch (error) {
+    console.error("Error deleting skill:", error);
+    return ErrorResponses.internalError();
+  }
+}

@@ -35,83 +35,137 @@
 // INSERT audit log with operation='UPDATE', changed_by=current_user_id
 // Return: { id, allocation_percentage, end_date, billability, is_critical_resource }
 
-import { NextRequest, NextResponse } from 'next/server';
-import { db, schema } from '@/lib/db';
-import { getCurrentUser, checkRole } from '@/lib/auth';
-import { createAuditLog } from '@/lib/audit';
-import { toDateString } from '@/lib/date-utils';
-import { eq, and, or, lte, gte, sql, sum, ne, inArray } from 'drizzle-orm';
+import { NextRequest, NextResponse } from "next/server";
+import { db, schema } from "@/lib/db";
+import { getCurrentUser, checkRole } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit";
+import { toDateString } from "@/lib/date-utils";
+import { eq, and, or, lte, gte, sql, sum, ne, inArray } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
-    
-    if (!checkRole(user, ['hr_executive'])) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+
+    if (!checkRole(user, ["hr_executive"])) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
     const body = await req.json();
-    const { emp_id, project_id, role, allocation_percentage, start_date, end_date, billability, is_critical_resource } = body;
+    const {
+      emp_id,
+      project_id,
+      role,
+      allocation_percentage,
+      start_date,
+      end_date,
+      billability,
+      is_critical_resource,
+    } = body;
 
-    if (!emp_id || !project_id || !role || !allocation_percentage || !start_date) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    // ---------------- VALIDATION ----------------
+
+    if (
+      !emp_id ||
+      !project_id ||
+      !role ||
+      !allocation_percentage ||
+      !start_date
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
     if (end_date && new Date(end_date) < new Date(start_date)) {
-      return NextResponse.json({ error: 'end_date must be >= start_date' }, { status: 400 });
+      return NextResponse.json(
+        { error: "end_date must be >= start_date" },
+        { status: 400 },
+      );
+    }
+
+    if (allocation_percentage <= 0 || allocation_percentage > 100) {
+      return NextResponse.json(
+        { error: "allocation_percentage must be between 1 and 100" },
+        { status: 400 },
+      );
     }
 
     const startDateStr = toDateString(start_date)!;
-    const endDateStr = toDateString(end_date);
+    const endDateStr = toDateString(end_date); // can be null
 
-    // Check overlapping allocations
+    // ---------------- OVERLAP CHECK (NULL-SAFE) ----------------
+    // Overlap rule:
+    // existing.start <= new.end
+    // AND
+    // COALESCE(existing.end, '9999-12-31') >= new.start
+
     const overlapping = await db
-      .select({ total: sum(schema.projectAllocation.allocation_percentage) })
+      .select({
+        total: sum(schema.projectAllocation.allocation_percentage),
+      })
       .from(schema.projectAllocation)
       .where(
         and(
           eq(schema.projectAllocation.emp_id, emp_id),
-          or(
-            and(lte(schema.projectAllocation.start_date, startDateStr), gte(schema.projectAllocation.end_date, startDateStr)),
-            endDateStr ? and(lte(schema.projectAllocation.start_date, endDateStr), gte(schema.projectAllocation.end_date, endDateStr)) : sql`false`,
-            endDateStr ? and(gte(schema.projectAllocation.start_date, startDateStr), lte(schema.projectAllocation.end_date, endDateStr)) : sql`false`
-          )
-        )
+
+          // existing.start <= new.end (or new.start if end_date is null)
+          lte(schema.projectAllocation.start_date, endDateStr ?? startDateStr),
+
+          // COALESCE(existing.end, infinity) >= new.start
+          gte(
+            sql`COALESCE(${schema.projectAllocation.end_date}, '9999-12-31')`,
+            startDateStr,
+          ),
+        ),
       );
 
     const currentAllocation = Number(overlapping[0]?.total || 0);
-    const totalAllocation = currentAllocation + allocation_percentage;
+    const totalAllocation = currentAllocation + Number(allocation_percentage);
 
     if (totalAllocation > 100) {
-      return NextResponse.json({
-        error: `Employee allocation exceeds 100%. Current: ${currentAllocation}%, Requested: ${allocation_percentage}%, Total: ${totalAllocation}%`
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: `Employee allocation exceeds 100%. Current: ${currentAllocation}%, Requested: ${allocation_percentage}%, Total: ${totalAllocation}%`,
+        },
+        { status: 400 },
+      );
     }
 
-    const [allocation] = await db.insert(schema.projectAllocation).values({
-      emp_id,
-      project_id,
-      role,
-      allocation_percentage: allocation_percentage.toString(),
-      start_date: startDateStr,
-      end_date: endDateStr,
-      billability: billability ?? true,
-      is_critical_resource: is_critical_resource ?? false,
-      assigned_by: user.id
-    }).returning();
+    // ---------------- INSERT ALLOCATION ----------------
+
+    const [allocation] = await db
+      .insert(schema.projectAllocation)
+      .values({
+        emp_id,
+        project_id,
+        role,
+        allocation_percentage: allocation_percentage.toString(),
+        start_date: startDateStr,
+        end_date: endDateStr ?? null, // open-ended supported
+        billability: billability ?? true,
+        is_critical_resource: is_critical_resource ?? false,
+        assigned_by: user.id,
+      })
+      .returning();
+
+    // ---------------- AUDIT LOG ----------------
 
     await createAuditLog({
-      entity_type: 'ALLOCATION',
+      entity_type: "PROJECT_ALLOCATION",
       entity_id: allocation.id,
-      operation: 'INSERT',
+      operation: "INSERT",
       changed_by: user.id,
-      changed_fields: allocation
+      changed_fields: allocation,
     });
 
     return NextResponse.json(allocation, { status: 201 });
   } catch (error) {
-    console.error('Error creating allocation:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error("Error creating allocation:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -119,35 +173,37 @@ export async function GET(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
     const { searchParams } = new URL(req.url);
-    const emp_id = searchParams.get('emp_id');
-    const project_id = searchParams.get('project_id');
-    const active_only = searchParams.get('active_only') === 'true';
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const emp_id = searchParams.get("emp_id");
+    const project_id = searchParams.get("project_id");
+    const active_only = searchParams.get("active_only") === "true";
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "20");
     const offset = (page - 1) * limit;
 
     const whereConditions: any[] = [];
 
     // Role-based filtering
-    if (user.employee_role === 'employee') {
+    if (user.employee_role === "employee") {
       whereConditions.push(eq(schema.projectAllocation.emp_id, user.id));
-    } else if (user.employee_role === 'project_manager') {
+    } else if (user.employee_role === "project_manager") {
       const managedProjects = await db
         .select({ id: schema.projects.id })
         .from(schema.projects)
         .where(eq(schema.projects.project_manager_id, user.id));
-      
-      const projectIds = managedProjects.map(p => p.id);
+
+      const projectIds = managedProjects.map((p) => p.id);
       if (projectIds.length === 0) {
         return NextResponse.json({ allocations: [], total: 0, page, limit });
       }
-      whereConditions.push(inArray(schema.projectAllocation.project_id, projectIds));
+      whereConditions.push(
+        inArray(schema.projectAllocation.project_id, projectIds),
+      );
     }
 
     // Additional filters
     if (emp_id) {
-      if (user.employee_role === 'employee' && emp_id !== user.id) {
-        return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+      if (user.employee_role === "employee" && emp_id !== user.id) {
+        return NextResponse.json({ error: "Access denied" }, { status: 403 });
       }
       whereConditions.push(eq(schema.projectAllocation.emp_id, emp_id));
     }
@@ -163,13 +219,14 @@ export async function GET(req: NextRequest) {
           lte(schema.projectAllocation.start_date, today),
           or(
             sql`${schema.projectAllocation.end_date} IS NULL`,
-            gte(schema.projectAllocation.end_date, today)
-          )
-        )
+            gte(schema.projectAllocation.end_date, today),
+          ),
+        ),
       );
     }
 
-    const whereClause = whereConditions.length > 0 ? and(...whereConditions) : undefined;
+    const whereClause =
+      whereConditions.length > 0 ? and(...whereConditions) : undefined;
 
     // Get total count
     const [countResult] = await db
@@ -197,8 +254,14 @@ export async function GET(req: NextRequest) {
         assigned_by: schema.projectAllocation.assigned_by,
       })
       .from(schema.projectAllocation)
-      .leftJoin(schema.employees, eq(schema.projectAllocation.emp_id, schema.employees.id))
-      .leftJoin(schema.projects, eq(schema.projectAllocation.project_id, schema.projects.id))
+      .leftJoin(
+        schema.employees,
+        eq(schema.projectAllocation.emp_id, schema.employees.id),
+      )
+      .leftJoin(
+        schema.projects,
+        eq(schema.projectAllocation.project_id, schema.projects.id),
+      )
       .where(whereClause)
       .orderBy(sql`${schema.projectAllocation.start_date} DESC`)
       .limit(limit)
@@ -206,88 +269,128 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ allocations, total, page, limit });
   } catch (error) {
-    console.error('Error fetching allocations:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error("Error fetching allocations:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
 export async function PUT(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
-    
-    if (!checkRole(user, ['hr_executive'])) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+
+    if (!checkRole(user, ["hr_executive"])) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
     const body = await req.json();
-    const { id, allocation_percentage, end_date, billability, is_critical_resource } = body;
+    const {
+      id,
+      allocation_percentage,
+      end_date,
+      billability,
+      is_critical_resource,
+    } = body;
 
     if (!id) {
-      return NextResponse.json({ error: 'Allocation id is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Allocation id is required" },
+        { status: 400 },
+      );
     }
 
-    // Get current allocation
+    // ---------------- FETCH CURRENT ALLOCATION ----------------
+
     const [currentAllocation] = await db
       .select()
       .from(schema.projectAllocation)
       .where(eq(schema.projectAllocation.id, id));
 
     if (!currentAllocation) {
-      return NextResponse.json({ error: 'Allocation not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: "Allocation not found" },
+        { status: 404 },
+      );
     }
 
-    // Validate allocation percentage if changed
-    if (allocation_percentage !== undefined && allocation_percentage !== Number(currentAllocation.allocation_percentage)) {
-      const newEndDateStr = end_date ? toDateString(end_date) : currentAllocation.end_date;
-      
+    // ---------------- VALIDATE ALLOCATION % CHANGE ----------------
+
+    if (
+      allocation_percentage !== undefined &&
+      allocation_percentage !== Number(currentAllocation.allocation_percentage)
+    ) {
+      const newEndDateStr =
+        end_date !== undefined
+          ? toDateString(end_date) // can be null
+          : currentAllocation.end_date;
+
+      const startDateStr = currentAllocation.start_date;
+
+      // Overlap rule:
+      // existing.start <= new.end
+      // AND
+      // COALESCE(existing.end, +infinity) >= new.start
+
       const overlapping = await db
-        .select({ total: sum(schema.projectAllocation.allocation_percentage) })
+        .select({
+          total: sum(schema.projectAllocation.allocation_percentage),
+        })
         .from(schema.projectAllocation)
         .where(
           and(
             eq(schema.projectAllocation.emp_id, currentAllocation.emp_id),
             ne(schema.projectAllocation.id, id),
-            or(
-              and(
-                lte(schema.projectAllocation.start_date, currentAllocation.start_date),
-                gte(schema.projectAllocation.end_date, currentAllocation.start_date)
-              ),
-              newEndDateStr ? and(
-                lte(schema.projectAllocation.start_date, newEndDateStr),
-                gte(schema.projectAllocation.end_date, newEndDateStr)
-              ) : sql`false`,
-              newEndDateStr ? and(
-                gte(schema.projectAllocation.start_date, currentAllocation.start_date),
-                lte(schema.projectAllocation.end_date, newEndDateStr)
-              ) : sql`false`
-            )
-          )
+
+            // existing.start <= new.end (or new.start if end_date null)
+            lte(
+              schema.projectAllocation.start_date,
+              newEndDateStr ?? startDateStr,
+            ),
+
+            // COALESCE(existing.end, infinity) >= new.start
+            gte(
+              sql`COALESCE(${schema.projectAllocation.end_date}, '9999-12-31')`,
+              startDateStr,
+            ),
+          ),
         );
 
       const otherAllocations = Number(overlapping[0]?.total || 0);
-      const totalAllocation = otherAllocations + allocation_percentage;
+      const totalAllocation = otherAllocations + Number(allocation_percentage);
 
       if (totalAllocation > 100) {
-        return NextResponse.json({
-          error: `Updated allocation exceeds 100%. Current other: ${otherAllocations}%, Requested: ${allocation_percentage}%, Total: ${totalAllocation}%`
-        }, { status: 400 });
+        return NextResponse.json(
+          {
+            error: `Updated allocation exceeds 100%. Current other: ${otherAllocations}%, Requested: ${allocation_percentage}%, Total: ${totalAllocation}%`,
+          },
+          { status: 400 },
+        );
       }
     }
 
-    // Build update data
+    // ---------------- BUILD UPDATE DATA ----------------
+
     const updateData: any = { updated_at: new Date() };
+
     if (allocation_percentage !== undefined) {
       updateData.allocation_percentage = allocation_percentage.toString();
     }
+
     if (end_date !== undefined) {
-      updateData.end_date = toDateString(end_date);
+      updateData.end_date = toDateString(end_date); // null allowed
     }
+
     if (billability !== undefined) {
       updateData.billability = billability;
     }
+
     if (is_critical_resource !== undefined) {
       updateData.is_critical_resource = is_critical_resource;
     }
+
+    // ---------------- UPDATE ----------------
 
     const [updatedAllocation] = await db
       .update(schema.projectAllocation)
@@ -295,12 +398,14 @@ export async function PUT(req: NextRequest) {
       .where(eq(schema.projectAllocation.id, id))
       .returning();
 
+    // ---------------- AUDIT ----------------
+
     await createAuditLog({
-      entity_type: 'ALLOCATION',
+      entity_type: "PROJECT_ALLOCATION",
       entity_id: id,
-      operation: 'UPDATE',
+      operation: "UPDATE",
       changed_by: user.id,
-      changed_fields: updateData
+      changed_fields: updateData,
     });
 
     return NextResponse.json({
@@ -308,10 +413,14 @@ export async function PUT(req: NextRequest) {
       allocation_percentage: updatedAllocation.allocation_percentage,
       end_date: updatedAllocation.end_date,
       billability: updatedAllocation.billability,
-      is_critical_resource: updatedAllocation.is_critical_resource
+      is_critical_resource: updatedAllocation.is_critical_resource,
     });
   } catch (error) {
-    console.error('Error updating allocation:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error("Error updating allocation:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
+ 

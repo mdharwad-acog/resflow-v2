@@ -104,7 +104,6 @@ export async function POST(req: NextRequest) {
     const missingFields = validateRequiredFields(body, [
       "project_code",
       "project_name",
-      "client_id",
       "project_manager_id",
     ]);
     if (missingFields) {
