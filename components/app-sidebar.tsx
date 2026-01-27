@@ -14,12 +14,32 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { navConfig } from "@/lib/nav";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { LogOut, User } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully");
+    router.push("/login");
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <Sidebar>
@@ -165,15 +185,36 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t p-4">
+        {user && (
+          <div className="mb-3 flex items-center gap-3 rounded-lg bg-muted/50 p-3">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback className="bg-primary text-primary-foreground">
+                {getInitials(user.full_name)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 overflow-hidden">
+              <p className="text-sm font-medium truncate">{user.full_name}</p>
+              <p className="text-xs text-muted-foreground truncate">
+                {user.employee_role}
+              </p>
+            </div>
+          </div>
+        )}
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <User />
-              <span>User Profile</span>
+            <SidebarMenuButton asChild tooltip="Profile Settings">
+              <Link href="/settings">
+                <User />
+                <span>Settings</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton className="text-destructive hover:text-destructive">
+            <SidebarMenuButton
+              onClick={handleLogout}
+              className="text-destructive hover:text-destructive"
+              tooltip="Logout"
+            >
               <LogOut />
               <span>Logout</span>
             </SidebarMenuButton>

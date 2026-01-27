@@ -12,15 +12,13 @@ import {
 } from "drizzle-orm/pg-core";
 
 // Enums
-export const employeeRoleEnum = pgEnum("employee_role", [
-  "employee",
-  "project_manager",
-  "hr_executive",
-]);
+export const employeeRoleEnum = pgEnum("employee_role", ["EMP", "PM", "HR"]);
 export const employeeTypeEnum = pgEnum("employee_type", [
   "Full-Time",
   "Intern",
+  "Trainee",
 ]);
+export const genderEnum = pgEnum("gender", ["Male", "Female", "Other"]);
 export const statusEnum = pgEnum("status", ["ACTIVE", "EXITED"]);
 export const projectStatusEnum = pgEnum("project_status", [
   "DRAFT",
@@ -69,18 +67,18 @@ export const employees = pgTable("employees", {
   ldap_username: varchar("ldap_username", { length: 100 }).notNull().unique(),
   full_name: varchar("full_name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
+  gender: genderEnum("gender"),
   employee_type: employeeTypeEnum("employee_type").notNull(),
-  employee_role: employeeRoleEnum("employee_role")
-    .notNull()
-    .default("employee"),
+  employee_role: employeeRoleEnum("employee_role").notNull().default("EMP"),
   employee_design: varchar("employee_design", { length: 100 }),
-  working_location: varchar("working_location", { length: 100 }),
+  working_location: varchar("working_location", { length: 100 }).notNull(),
   department_id: uuid("department_id"),
-  project_manager_id: uuid("project_manager_id"),
+  reporting_manager_id: uuid("reporting_manager_id"), // Organizational reporting manager
   experience_years: decimal("experience_years", { precision: 4, scale: 1 }),
   resume_url: text("resume_url"),
   college: varchar("college", { length: 255 }),
   degree: varchar("degree", { length: 255 }),
+  educational_stream: varchar("educational_stream", { length: 255 }), // New field
   status: statusEnum("status").notNull().default("ACTIVE"),
   joined_on: date("joined_on").notNull(),
   exited_on: date("exited_on"),

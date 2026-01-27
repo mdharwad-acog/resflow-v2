@@ -1,0 +1,3601 @@
+
+> my-v0-project@0.1.0 dev /home/tnikhil/resflow-v2
+> next dev
+
+   ▲ Next.js 16.0.10 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://100.115.92.195:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.6s
+ ○ Compiling /login ...
+ GET /login 200 in 29.3s (compile: 27.9s, render: 1346ms)
+ ○ Compiling /api/auth ...
+[AUTH] Login attempt for username: admin.hr
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: admin.hr
+[MOCK LDAP] ✓ User validated: admin.hr
+[AUTH] ✓ LDAP validated username: admin.hr
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: System Admin (HR001)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for admin.hr
+ POST /api/auth 200 in 7.9s (compile: 7.3s, render: 654ms)
+ ✓ Compiled in 795ms
+ GET /login 200 in 717ms (compile: 179ms, render: 539ms)
+[AUTH] Login attempt for username: admin.hr
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: admin.hr
+[MOCK LDAP] ✓ User validated: admin.hr
+[AUTH] ✓ LDAP validated username: admin.hr
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: System Admin (HR001)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for admin.hr
+ POST /api/auth 200 in 255ms (compile: 33ms, render: 222ms)
+ ○ Compiling /dashboard ...
+ GET /dashboard 200 in 7.0s (compile: 6.7s, render: 217ms)
+ GET /api/dashboard/metrics 200 in 888ms (compile: 792ms, render: 95ms)
+ GET /api/dashboard/metrics 200 in 134ms (compile: 11ms, render: 123ms)
+ GET /logs 200 in 1372ms (compile: 1254ms, render: 118ms)
+ GET /api/dashboard/metrics 200 in 256ms (compile: 24ms, render: 233ms)
+ GET /api/dashboard/metrics 200 in 38ms (compile: 6ms, render: 32ms)
+ GET /reports 200 in 1450ms (compile: 969ms, render: 481ms)
+ GET /api/dashboard/metrics 200 in 52ms (compile: 13ms, render: 40ms)
+ GET /api/dashboard/metrics 200 in 56ms (compile: 11ms, render: 45ms)
+ GET /tasks 200 in 1397ms (compile: 1244ms, render: 153ms)
+ GET /api/tasks?action=list 200 in 825ms (compile: 726ms, render: 98ms)
+ GET /api/tasks?action=list 200 in 130ms (compile: 100ms, render: 30ms)
+ GET /projects 200 in 1177ms (compile: 1065ms, render: 112ms)
+ ✓ Compiled in 922ms
+ ✓ Compiled in 660ms
+ ✓ Compiled in 1546ms
+ GET /tasks 200 in 1076ms (compile: 584ms, render: 492ms)
+ GET /api/tasks?action=list 200 in 128ms (compile: 46ms, render: 81ms)
+ GET /api/tasks?action=list 200 in 33ms (compile: 15ms, render: 18ms)
+ GET /dashboard 200 in 646ms (compile: 215ms, render: 431ms)
+ GET /api/dashboard/metrics 200 in 234ms (compile: 45ms, render: 189ms)
+ GET /api/dashboard/metrics 200 in 92ms (compile: 16ms, render: 77ms)
+ ✓ Compiled in 376ms
+ GET /tasks 200 in 778ms (compile: 195ms, render: 584ms)
+ GET /api/tasks?action=list 200 in 49ms (compile: 16ms, render: 32ms)
+ GET /api/tasks?action=list 200 in 58ms (compile: 8ms, render: 49ms)
+ GET /projects 200 in 74ms (compile: 13ms, render: 61ms)
+ ✓ Compiled in 435ms
+ GET /allocations 200 in 3.5s (compile: 3.1s, render: 466ms)
+ GET /skills 200 in 3.5s (compile: 2.9s, render: 559ms)
+ ✓ Compiled in 285ms
+ ✓ Compiled in 393ms
+ ✓ Compiled in 464ms
+ GET /tasks 200 in 618ms (compile: 201ms, render: 417ms)
+ GET /dashboard 200 in 392ms (compile: 209ms, render: 184ms)
+ GET /api/tasks?action=list 200 in 756ms (compile: 23ms, render: 733ms)
+ GET /api/dashboard/metrics 200 in 129ms (compile: 12ms, render: 117ms)
+ GET /api/tasks?action=list 200 in 170ms (compile: 24ms, render: 146ms)
+ GET /api/dashboard/metrics 200 in 222ms (compile: 9ms, render: 213ms)
+ GET /tasks 200 in 48ms (compile: 7ms, render: 41ms)
+ GET /api/tasks?action=list 200 in 84ms (compile: 18ms, render: 67ms)
+ GET /api/tasks?action=list 200 in 34ms (compile: 7ms, render: 27ms)
+ GET /dashboard 200 in 63ms (compile: 7ms, render: 56ms)
+ GET /api/dashboard/metrics 200 in 70ms (compile: 13ms, render: 58ms)
+ GET /api/dashboard/metrics 200 in 55ms (compile: 5ms, render: 50ms)
+ ✓ Compiled in 1897ms
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+ ✓ Compiled in 392ms
+ ○ Compiling middleware ...
+ ○ Compiling /_error ...
+ ✓ Compiled in 6s
+ GET /dashboard 404 in 11.9s (compile: -616201µs, proxy.ts: 11.8s, render: 677ms)
+ GET /dashboard 200 in 1695ms (compile: 83ms, proxy.ts: 911ms, render: 701ms)
+ ○ Compiling /_not-found/page ...
+ GET /dashboard 200 in 812ms (compile: 177ms, proxy.ts: 66ms, render: 568ms)
+ GET /dashboard 200 in 2.0s (compile: 51ms, proxy.ts: 49ms, render: 1911ms)
+ GET /dashboard 200 in 400ms (compile: 27ms, proxy.ts: 52ms, render: 320ms)
+ GET /dashboard 200 in 396ms (compile: 25ms, proxy.ts: 28ms, render: 344ms)
+ GET /dashboard 200 in 413ms (compile: 26ms, proxy.ts: 31ms, render: 357ms)
+ GET /dashboard 200 in 287ms (compile: 22ms, proxy.ts: 22ms, render: 243ms)
+ GET /dashboard 200 in 567ms (compile: 36ms, proxy.ts: 26ms, render: 505ms)
+ GET /dashboard 200 in 439ms (compile: 29ms, proxy.ts: 29ms, render: 381ms)
+ GET /dashboard 200 in 274ms (compile: 25ms, proxy.ts: 41ms, render: 207ms)
+ GET /dashboard 200 in 292ms (compile: 29ms, proxy.ts: 21ms, render: 242ms)
+ GET /dashboard 200 in 213ms (compile: 17ms, proxy.ts: 27ms, render: 168ms)
+ GET /dashboard 200 in 290ms (compile: 33ms, proxy.ts: 23ms, render: 234ms)
+ GET /dashboard 200 in 414ms (compile: 44ms, proxy.ts: 63ms, render: 307ms)
+ GET /dashboard 200 in 297ms (compile: 26ms, proxy.ts: 21ms, render: 250ms)
+ GET /dashboard 200 in 538ms (compile: 68ms, proxy.ts: 44ms, render: 426ms)
+ GET /dashboard 200 in 265ms (compile: 30ms, proxy.ts: 20ms, render: 216ms)
+ GET /dashboard 200 in 490ms (compile: 37ms, proxy.ts: 35ms, render: 418ms)
+ GET /dashboard 200 in 567ms (compile: 54ms, proxy.ts: 51ms, render: 462ms)
+ GET /dashboard 200 in 253ms (compile: 23ms, proxy.ts: 24ms, render: 206ms)
+ GET /dashboard 200 in 265ms (compile: 14ms, proxy.ts: 13ms, render: 238ms)
+ GET /dashboard 200 in 339ms (compile: 26ms, proxy.ts: 14ms, render: 299ms)
+ GET /dashboard 200 in 430ms (compile: 40ms, proxy.ts: 42ms, render: 348ms)
+ GET /dashboard 200 in 266ms (compile: 15ms, proxy.ts: 23ms, render: 228ms)
+ GET /dashboard 200 in 120ms (compile: 14ms, proxy.ts: 18ms, render: 89ms)
+ GET /dashboard 200 in 215ms (compile: 41ms, proxy.ts: 14ms, render: 159ms)
+ GET /dashboard 200 in 182ms (compile: 33ms, proxy.ts: 15ms, render: 134ms)
+ GET /dashboard 200 in 163ms (compile: 14ms, proxy.ts: 12ms, render: 138ms)
+ GET /dashboard 200 in 424ms (compile: 42ms, proxy.ts: 46ms, render: 337ms)
+ GET /dashboard 200 in 401ms (compile: 16ms, proxy.ts: 16ms, render: 368ms)
+ GET /dashboard 200 in 180ms (compile: 14ms, proxy.ts: 12ms, render: 154ms)
+ GET /dashboard 200 in 91ms (compile: 9ms, proxy.ts: 6ms, render: 75ms)
+ GET /dashboard 200 in 199ms (compile: 7ms, proxy.ts: 5ms, render: 187ms)
+ GET /dashboard 200 in 111ms (compile: 12ms, proxy.ts: 8ms, render: 91ms)
+ GET /dashboard 200 in 85ms (compile: 10ms, proxy.ts: 9ms, render: 66ms)
+ GET /dashboard 200 in 80ms (compile: 8ms, proxy.ts: 6ms, render: 66ms)
+ GET /dashboard 200 in 177ms (compile: 17ms, proxy.ts: 13ms, render: 148ms)
+ GET /dashboard 200 in 130ms (compile: 14ms, proxy.ts: 13ms, render: 104ms)
+ GET /dashboard 200 in 193ms (compile: 9ms, proxy.ts: 11ms, render: 172ms)
+ GET /dashboard 200 in 393ms (compile: 132ms, proxy.ts: 49ms, render: 211ms)
+ GET /dashboard 200 in 201ms (compile: 16ms, proxy.ts: 26ms, render: 158ms)
+ GET /dashboard 200 in 179ms (compile: 16ms, proxy.ts: 11ms, render: 153ms)
+ GET /dashboard 200 in 173ms (compile: 15ms, proxy.ts: 20ms, render: 138ms)
+ GET /dashboard 200 in 227ms (compile: 27ms, proxy.ts: 16ms, render: 185ms)
+ GET /dashboard 200 in 250ms (compile: 16ms, proxy.ts: 18ms, render: 216ms)
+ GET /dashboard 200 in 182ms (compile: 17ms, proxy.ts: 13ms, render: 152ms)
+ GET /dashboard 200 in 338ms (compile: 23ms, proxy.ts: 21ms, render: 294ms)
+ GET /dashboard 200 in 407ms (compile: 47ms, proxy.ts: 53ms, render: 307ms)
+ GET /dashboard 200 in 226ms (compile: 31ms, proxy.ts: 17ms, render: 179ms)
+ GET /dashboard 200 in 127ms (compile: 12ms, proxy.ts: 11ms, render: 104ms)
+ GET /dashboard 200 in 99ms (compile: 8ms, proxy.ts: 9ms, render: 83ms)
+ GET /dashboard 200 in 148ms (compile: 19ms, proxy.ts: 20ms, render: 110ms)
+ GET /dashboard 200 in 144ms (compile: 17ms, proxy.ts: 17ms, render: 109ms)
+ GET /dashboard 200 in 132ms (compile: 11ms, proxy.ts: 18ms, render: 103ms)
+ GET /dashboard 200 in 148ms (compile: 10ms, proxy.ts: 16ms, render: 123ms)
+ GET /dashboard 200 in 390ms (compile: 13ms, proxy.ts: 18ms, render: 359ms)
+ GET /dashboard 200 in 171ms (compile: 15ms, proxy.ts: 17ms, render: 138ms)
+ GET /dashboard 200 in 210ms (compile: 19ms, proxy.ts: 20ms, render: 171ms)
+ GET /dashboard 200 in 1811ms (compile: 129ms, proxy.ts: 258ms, render: 1425ms)
+ GET /dashboard 200 in 367ms (compile: 34ms, proxy.ts: 28ms, render: 305ms)
+ GET /dashboard 200 in 240ms (compile: 26ms, proxy.ts: 22ms, render: 192ms)
+ GET /dashboard 200 in 243ms (compile: 76ms, proxy.ts: 15ms, render: 152ms)
+ GET /dashboard 200 in 325ms (compile: 16ms, proxy.ts: 10ms, render: 299ms)
+ GET /dashboard 200 in 146ms (compile: 10ms, proxy.ts: 13ms, render: 124ms)
+ GET /dashboard 200 in 251ms (compile: 36ms, proxy.ts: 75ms, render: 140ms)
+ GET /dashboard 200 in 931ms (compile: 18ms, proxy.ts: 9ms, render: 904ms)
+ GET /dashboard 200 in 251ms (compile: 34ms, proxy.ts: 20ms, render: 197ms)
+ GET /dashboard 200 in 244ms (compile: 28ms, proxy.ts: 34ms, render: 182ms)
+ GET /dashboard 200 in 133ms (compile: 19ms, proxy.ts: 29ms, render: 85ms)
+ GET /dashboard 200 in 281ms (compile: 61ms, proxy.ts: 13ms, render: 207ms)
+ GET /dashboard 200 in 305ms (compile: 23ms, proxy.ts: 34ms, render: 248ms)
+ GET /dashboard 200 in 702ms (compile: 20ms, proxy.ts: 12ms, render: 670ms)
+ GET /dashboard 200 in 327ms (compile: 24ms, proxy.ts: 28ms, render: 274ms)
+ GET /dashboard 200 in 576ms (compile: 42ms, proxy.ts: 66ms, render: 468ms)
+ GET /dashboard 200 in 1116ms (compile: 69ms, proxy.ts: 59ms, render: 988ms)
+ GET /dashboard 200 in 408ms (compile: 61ms, proxy.ts: 45ms, render: 301ms)
+ GET /dashboard 200 in 758ms (compile: 27ms, proxy.ts: 13ms, render: 718ms)
+ GET /dashboard 200 in 288ms (compile: 40ms, proxy.ts: 52ms, render: 196ms)
+ GET /dashboard 200 in 116ms (compile: 12ms, proxy.ts: 11ms, render: 93ms)
+ GET /dashboard 200 in 517ms (compile: 97ms, proxy.ts: 20ms, render: 399ms)
+ GET /dashboard 200 in 561ms (compile: 35ms, proxy.ts: 36ms, render: 491ms)
+ GET /dashboard 200 in 271ms (compile: 71ms, proxy.ts: 34ms, render: 166ms)
+ GET /dashboard 200 in 364ms (compile: 60ms, proxy.ts: 61ms, render: 244ms)
+ GET /dashboard 200 in 907ms (compile: 86ms, proxy.ts: 64ms, render: 756ms)
+ GET /dashboard 200 in 604ms (compile: 3ms, proxy.ts: 129ms, render: 473ms)
+ GET /dashboard 200 in 445ms (compile: 32ms, proxy.ts: 82ms, render: 332ms)
+ GET /dashboard 200 in 262ms (compile: 20ms, proxy.ts: 19ms, render: 223ms)
+ GET /dashboard 200 in 276ms (compile: 24ms, proxy.ts: 27ms, render: 224ms)
+ GET /dashboard 200 in 421ms (compile: 37ms, proxy.ts: 26ms, render: 359ms)
+ GET /dashboard 200 in 295ms (compile: 27ms, proxy.ts: 17ms, render: 252ms)
+ GET /dashboard 200 in 453ms (compile: 53ms, proxy.ts: 36ms, render: 363ms)
+ GET /dashboard 200 in 385ms (compile: 53ms, proxy.ts: 35ms, render: 297ms)
+ GET /dashboard 200 in 228ms (compile: 29ms, proxy.ts: 15ms, render: 184ms)
+ GET /dashboard 200 in 308ms (compile: 34ms, proxy.ts: 35ms, render: 239ms)
+ GET /dashboard 200 in 430ms (compile: 71ms, proxy.ts: 38ms, render: 321ms)
+ GET /dashboard 200 in 632ms (compile: 31ms, proxy.ts: 110ms, render: 491ms)
+ GET /dashboard 200 in 582ms (compile: 56ms, proxy.ts: 46ms, render: 480ms)
+ GET /dashboard 200 in 442ms (compile: 38ms, proxy.ts: 48ms, render: 356ms)
+ GET /dashboard 200 in 505ms (compile: 42ms, proxy.ts: 49ms, render: 415ms)
+ GET /dashboard 200 in 362ms (compile: 39ms, proxy.ts: 56ms, render: 267ms)
+ GET /dashboard 200 in 285ms (compile: 23ms, proxy.ts: 27ms, render: 235ms)
+ GET /dashboard 200 in 151ms (compile: 25ms, proxy.ts: 30ms, render: 96ms)
+ GET /dashboard 200 in 191ms (compile: 9ms, proxy.ts: 9ms, render: 173ms)
+ GET /dashboard 200 in 293ms (compile: 23ms, proxy.ts: 22ms, render: 249ms)
+ GET /dashboard 200 in 383ms (compile: 33ms, proxy.ts: 22ms, render: 328ms)
+ GET /dashboard 200 in 198ms (compile: 8ms, proxy.ts: 7ms, render: 183ms)
+ GET /dashboard 200 in 236ms (compile: 14ms, proxy.ts: 23ms, render: 199ms)
+ GET /dashboard 200 in 271ms (compile: 26ms, proxy.ts: 19ms, render: 226ms)
+ GET /dashboard 200 in 417ms (compile: 22ms, proxy.ts: 39ms, render: 356ms)
+ GET /dashboard 200 in 166ms (compile: 19ms, proxy.ts: 14ms, render: 132ms)
+ GET /dashboard 200 in 152ms (compile: 16ms, proxy.ts: 17ms, render: 119ms)
+ GET /dashboard 200 in 360ms (compile: 21ms, proxy.ts: 49ms, render: 289ms)
+ GET /dashboard 200 in 230ms (compile: 19ms, proxy.ts: 26ms, render: 184ms)
+ GET /dashboard 200 in 283ms (compile: 33ms, proxy.ts: 31ms, render: 219ms)
+ GET /dashboard 200 in 184ms (compile: 20ms, proxy.ts: 24ms, render: 141ms)
+ GET /dashboard 200 in 409ms (compile: 34ms, proxy.ts: 33ms, render: 343ms)
+ GET /dashboard 200 in 281ms (compile: 35ms, proxy.ts: 46ms, render: 200ms)
+ GET /dashboard 200 in 291ms (compile: 16ms, proxy.ts: 30ms, render: 245ms)
+ GET /dashboard 200 in 317ms (compile: 21ms, proxy.ts: 23ms, render: 273ms)
+ GET /dashboard 200 in 2.2s (compile: 48ms, proxy.ts: 30ms, render: 2.1s)
+ GET /api/dashboard/metrics 200 in 1722ms (compile: 60ms, render: 1661ms)
+ ✓ Compiled in 1327ms
+ ✓ Compiled in 1780ms
+ ✓ Compiled in 970ms
+ GET /dashboard 200 in 7.3s (compile: 2.3s, proxy.ts: 48ms, render: 4.9s)
+ GET /dashboard 200 in 3.6s (compile: 264ms, proxy.ts: 288ms, render: 3.0s)
+ ✓ Compiled in 684ms
+ GET /api/dashboard/metrics 200 in 395ms (compile: 64ms, render: 331ms)
+ ✓ Compiled in 1015ms
+ GET /dashboard 200 in 286ms (compile: 57ms, proxy.ts: 37ms, render: 192ms)
+ ✓ Compiled in 1760ms
+ GET /dashboard 200 in 549ms (compile: 154ms, proxy.ts: 23ms, render: 373ms)
+Error fetching dashboard metrics: Error: Failed query: select cast(count(*) as integer) from "tasks" where "tasks"."status" = $1
+params: DUE
+    at async GET (app/api/dashboard/metrics/route.ts:267:34)
+  265 |
+  266 |       // All pending tasks
+> 267 |       const pendingTasksResult = await db
+      |                                  ^
+  268 |         .select({ count: sql<number>`cast(count(*) as integer)` })
+  269 |         .from(schema.tasks)
+  270 |         .where(eq(schema.tasks.status, "DUE")); {
+  query: 'select cast(count(*) as integer) from "tasks" where "tasks"."status" = $1',
+  params: [Array],
+  [cause]: AggregateError: 
+      at async GET (app/api/dashboard/metrics/route.ts:267:34)
+    265 |
+    266 |       // All pending tasks
+  > 267 |       const pendingTasksResult = await db
+        |                                  ^
+    268 |         .select({ count: sql<number>`cast(count(*) as integer)` })
+    269 |         .from(schema.tasks)
+    270 |         .where(eq(schema.tasks.status, "DUE")); {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/dashboard/metrics 500 in 5.4s (compile: 97ms, render: 5.3s)
+ GET /login 200 in 2.4s (compile: 968ms, proxy.ts: 48ms, render: 1351ms)
+[AUTH] Login attempt for username: admin.hr
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: admin.hr
+[MOCK LDAP] ✓ User validated: admin.hr
+[AUTH] ✓ LDAP validated username: admin.hr
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✗ Login error: Error: Failed query: select "id", "employee_code", "ldap_username", "full_name", "email", "employee_type", "employee_role", "employee_design", "working_location", "department_id", "project_manager_id", "experience_years", "resume_url", "college", "degree", "status", "joined_on", "exited_on", "created_at", "updated_at" from "employees" where "employees"."ldap_username" = $1
+params: admin.hr
+    at async handleLogin (app/api/auth/route.ts:119:24)
+  117 |     // Step 2: Fetch user from database using validated username
+  118 |     console.log(`[AUTH] Step 2: Fetching user from database...`);
+> 119 |     const [employee] = await db
+      |                        ^
+  120 |       .select()
+  121 |       .from(schema.employees)
+  122 |       .where(eq(schema.employees.ldap_username, ldap_username)); {
+  query: 'select "id", "employee_code", "ldap_username", "full_name", "email", "employee_type", "employee_role", "employee_design", "working_location", "department_id", "project_manager_id", "experience_years", "resume_url", "college", "degree", "status", "joined_on", "exited_on", "created_at", "updated_at" from "employees" where "employees"."ldap_username" = $1',
+  params: [Array],
+  [cause]: AggregateError: 
+      at async handleLogin (app/api/auth/route.ts:119:24)
+    117 |     // Step 2: Fetch user from database using validated username
+    118 |     console.log(`[AUTH] Step 2: Fetching user from database...`);
+  > 119 |     const [employee] = await db
+        |                        ^
+    120 |       .select()
+    121 |       .from(schema.employees)
+    122 |       .where(eq(schema.employees.ldap_username, ldap_username)); {
+    code: 'ECONNREFUSED'
+  }
+}
+ POST /api/auth 500 in 680ms (compile: 21ms, render: 659ms)
+ GET /dashboard 200 in 428ms (compile: 17ms, proxy.ts: 12ms, render: 400ms)
+Error fetching dashboard metrics: Error: Failed query: select cast(count(*) as integer) from "tasks" where "tasks"."status" = $1
+params: DUE
+    at async GET (app/api/dashboard/metrics/route.ts:267:34)
+  265 |
+  266 |       // All pending tasks
+> 267 |       const pendingTasksResult = await db
+      |                                  ^
+  268 |         .select({ count: sql<number>`cast(count(*) as integer)` })
+  269 |         .from(schema.tasks)
+  270 |         .where(eq(schema.tasks.status, "DUE")); {
+  query: 'select cast(count(*) as integer) from "tasks" where "tasks"."status" = $1',
+  params: [Array],
+  [cause]: AggregateError: 
+      at async GET (app/api/dashboard/metrics/route.ts:267:34)
+    265 |
+    266 |       // All pending tasks
+  > 267 |       const pendingTasksResult = await db
+        |                                  ^
+    268 |         .select({ count: sql<number>`cast(count(*) as integer)` })
+    269 |         .from(schema.tasks)
+    270 |         .where(eq(schema.tasks.status, "DUE")); {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/dashboard/metrics 500 in 1298ms (compile: 39ms, render: 1259ms)
+ GET /tasks 200 in 1870ms (compile: 1217ms, proxy.ts: 13ms, render: 640ms)
+Error fetching tasks: Error: Failed query: select count(*) from "tasks"
+params: 
+    at async getCount (lib/db-helpers.ts:33:20)
+    at async handleList (app/api/tasks/route.ts:151:17)
+    at async GET (app/api/tasks/route.ts:252:14)
+  31 |  */
+  32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+> 33 |   const [result] = await db
+     |                    ^
+  34 |     .select({ count: sql<number>`count(*)` })
+  35 |     .from(table)
+  36 |     .where(whereClause); {
+  query: 'select count(*) from "tasks"',
+  params: [],
+  [cause]: AggregateError: 
+      at async getCount (lib/db-helpers.ts:33:20)
+      at async handleList (app/api/tasks/route.ts:151:17)
+      at async GET (app/api/tasks/route.ts:252:14)
+    31 |  */
+    32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+  > 33 |   const [result] = await db
+       |                    ^
+    34 |     .select({ count: sql<number>`count(*)` })
+    35 |     .from(table)
+    36 |     .where(whereClause); {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/tasks?action=list 500 in 1756ms (compile: 987ms, render: 769ms)
+Error fetching tasks: Error: Failed query: select count(*) from "tasks"
+params: 
+    at async getCount (lib/db-helpers.ts:33:20)
+    at async handleList (app/api/tasks/route.ts:151:17)
+    at async GET (app/api/tasks/route.ts:252:14)
+  31 |  */
+  32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+> 33 |   const [result] = await db
+     |                    ^
+  34 |     .select({ count: sql<number>`count(*)` })
+  35 |     .from(table)
+  36 |     .where(whereClause); {
+  query: 'select count(*) from "tasks"',
+  params: [],
+  [cause]: AggregateError: 
+      at async getCount (lib/db-helpers.ts:33:20)
+      at async handleList (app/api/tasks/route.ts:151:17)
+      at async GET (app/api/tasks/route.ts:252:14)
+    31 |  */
+    32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+  > 33 |   const [result] = await db
+       |                    ^
+    34 |     .select({ count: sql<number>`count(*)` })
+    35 |     .from(table)
+    36 |     .where(whereClause); {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/tasks?action=list 500 in 643ms (compile: 13ms, render: 630ms)
+ GET /projects 200 in 334ms (compile: 182ms, proxy.ts: 12ms, render: 139ms)
+ GET /employees 200 in 1504ms (compile: 1370ms, proxy.ts: 9ms, render: 125ms)
+ GET /allocations 200 in 385ms (compile: 204ms, proxy.ts: 7ms, render: 173ms)
+ GET /tasks 200 in 171ms (compile: 55ms, proxy.ts: 15ms, render: 101ms)
+Error fetching tasks: Error: Failed query: select count(*) from "tasks"
+params: 
+    at async getCount (lib/db-helpers.ts:33:20)
+    at async handleList (app/api/tasks/route.ts:151:17)
+    at async GET (app/api/tasks/route.ts:252:14)
+  31 |  */
+  32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+> 33 |   const [result] = await db
+     |                    ^
+  34 |     .select({ count: sql<number>`count(*)` })
+  35 |     .from(table)
+  36 |     .where(whereClause); {
+  query: 'select count(*) from "tasks"',
+  params: [],
+  [cause]: AggregateError: 
+      at async getCount (lib/db-helpers.ts:33:20)
+      at async handleList (app/api/tasks/route.ts:151:17)
+      at async GET (app/api/tasks/route.ts:252:14)
+    31 |  */
+    32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+  > 33 |   const [result] = await db
+       |                    ^
+    34 |     .select({ count: sql<number>`count(*)` })
+    35 |     .from(table)
+    36 |     .where(whereClause); {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/tasks?action=list 500 in 2.2s (compile: 22ms, render: 2.2s)
+ ○ Compiling /demands ...
+Error fetching tasks: Error: Failed query: select count(*) from "tasks"
+params: 
+    at async getCount (lib/db-helpers.ts:33:20)
+    at async handleList (app/api/tasks/route.ts:151:17)
+    at async GET (app/api/tasks/route.ts:252:14)
+  31 |  */
+  32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+> 33 |   const [result] = await db
+     |                    ^
+  34 |     .select({ count: sql<number>`count(*)` })
+  35 |     .from(table)
+  36 |     .where(whereClause); {
+  query: 'select count(*) from "tasks"',
+  params: [],
+  [cause]: AggregateError: 
+      at async getCount (lib/db-helpers.ts:33:20)
+      at async handleList (app/api/tasks/route.ts:151:17)
+      at async GET (app/api/tasks/route.ts:252:14)
+    31 |  */
+    32 | export async function getCount(table: any, whereClause?: any): Promise<number> {
+  > 33 |   const [result] = await db
+       |                    ^
+    34 |     .select({ count: sql<number>`count(*)` })
+    35 |     .from(table)
+    36 |     .where(whereClause); {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/tasks?action=list 500 in 1693ms (compile: 34ms, render: 1658ms)
+ GET /demands 200 in 6.2s (compile: 4.1s, proxy.ts: 12ms, render: 1997ms)
+ GET /audit 200 in 1017ms (compile: 889ms, proxy.ts: 11ms, render: 117ms)
+ ○ Compiling /settings ...
+ GET /settings 200 in 6.4s (compile: 5.9s, proxy.ts: 109ms, render: 406ms)
+ GET /login?redirect=%2Fsettings 200 in 356ms (compile: 37ms, proxy.ts: 22ms, render: 297ms)
+ GET /login?redirect=%2Fsettings 200 in 219ms (compile: 36ms, proxy.ts: 27ms, render: 156ms)
+[AUTH] Login attempt for username: admin.hr
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: admin.hr
+[MOCK LDAP] ✓ User validated: admin.hr
+[AUTH] ✓ LDAP validated username: admin.hr
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✗ Login error: Error: Failed query: select "id", "employee_code", "ldap_username", "full_name", "email", "employee_type", "employee_role", "employee_design", "working_location", "department_id", "project_manager_id", "experience_years", "resume_url", "college", "degree", "status", "joined_on", "exited_on", "created_at", "updated_at" from "employees" where "employees"."ldap_username" = $1
+params: admin.hr
+    at async handleLogin (app/api/auth/route.ts:119:24)
+  117 |     // Step 2: Fetch user from database using validated username
+  118 |     console.log(`[AUTH] Step 2: Fetching user from database...`);
+> 119 |     const [employee] = await db
+      |                        ^
+  120 |       .select()
+  121 |       .from(schema.employees)
+  122 |       .where(eq(schema.employees.ldap_username, ldap_username)); {
+  query: 'select "id", "employee_code", "ldap_username", "full_name", "email", "employee_type", "employee_role", "employee_design", "working_location", "department_id", "project_manager_id", "experience_years", "resume_url", "college", "degree", "status", "joined_on", "exited_on", "created_at", "updated_at" from "employees" where "employees"."ldap_username" = $1',
+  params: [Array],
+  [cause]: AggregateError: 
+      at async handleLogin (app/api/auth/route.ts:119:24)
+    117 |     // Step 2: Fetch user from database using validated username
+    118 |     console.log(`[AUTH] Step 2: Fetching user from database...`);
+  > 119 |     const [employee] = await db
+        |                        ^
+    120 |       .select()
+    121 |       .from(schema.employees)
+    122 |       .where(eq(schema.employees.ldap_username, ldap_username)); {
+    code: 'ECONNREFUSED'
+  }
+}
+ POST /api/auth 500 in 1263ms (compile: 13ms, render: 1250ms)
+[AUTH] Login attempt for username: admin.hr
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: admin.hr
+[MOCK LDAP] ✓ User validated: admin.hr
+[AUTH] ✓ LDAP validated username: admin.hr
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: System Admin (HR001)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for admin.hr
+ POST /api/auth 200 in 598ms (compile: 7ms, render: 592ms)
+ GET /settings 200 in 230ms (compile: 11ms, proxy.ts: 16ms, render: 203ms)
+ GET /settings 200 in 175ms (compile: 11ms, proxy.ts: 16ms, render: 148ms)
+ GET /api/auth/me 404 in 3.1s (compile: 1002ms, render: 2.1s)
+ GET /api/auth/me 404 in 945ms (compile: 149ms, render: 796ms)
+ ✓ Compiled in 1282ms
+ ✓ Compiled in 5.8s
+ GET /settings 200 in 1778ms (compile: 1207ms, proxy.ts: 91ms, render: 480ms)
+ GET /settings 200 in 249ms (compile: 27ms, proxy.ts: 28ms, render: 194ms)
+ GET /settings 200 in 144ms (compile: 10ms, proxy.ts: 5ms, render: 129ms)
+ ✓ Compiled in 2.6s
+ ✓ Compiled in 7.3s
+ ✓ Compiled in 1052ms
+ ✓ Compiled in 467ms
+ ⨯ ./app/(pages)/dashboard/page.tsx
+Module not found: Can't resolve './page.tsx'
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(pages)/dashboard/page.tsx
+Module not found: Can't resolve './page.tsx'
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 658ms (compile: 377ms, proxy.ts: 163ms, render: 119ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 106ms (compile: 46ms, proxy.ts: 22ms, render: 38ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 240ms (compile: 188ms, proxy.ts: 10ms, render: 42ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 104ms (compile: 53ms, proxy.ts: 10ms, render: 41ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 304ms (compile: 147ms, proxy.ts: 11ms, render: 145ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 281ms (compile: 191ms, proxy.ts: 28ms, render: 62ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 243ms (compile: 104ms, proxy.ts: 22ms, render: 117ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 78ms (compile: 40ms, proxy.ts: 8ms, render: 30ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 178ms (compile: 95ms, proxy.ts: 17ms, render: 66ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 203ms (compile: 117ms, proxy.ts: 18ms, render: 68ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 97ms (compile: 50ms, proxy.ts: 9ms, render: 38ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 131ms (compile: 86ms, proxy.ts: 19ms, render: 27ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 664ms (compile: 361ms, proxy.ts: 13ms, render: 290ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 3.4s (compile: 3.0s, proxy.ts: 159ms, render: 255ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 383ms (compile: 233ms, proxy.ts: 15ms, render: 135ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 341ms (compile: 165ms, proxy.ts: 15ms, render: 161ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 298ms (compile: 167ms, proxy.ts: 13ms, render: 117ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 494ms (compile: 254ms, proxy.ts: 37ms, render: 203ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 642ms (compile: 380ms, proxy.ts: 50ms, render: 212ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 550ms (compile: 408ms, proxy.ts: 78ms, render: 63ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 384ms (compile: 290ms, proxy.ts: 27ms, render: 67ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 286ms (compile: 144ms, proxy.ts: 20ms, render: 122ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 456ms (compile: 268ms, proxy.ts: 41ms, render: 148ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 207ms (compile: 140ms, proxy.ts: 24ms, render: 43ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 170ms (compile: 91ms, proxy.ts: 22ms, render: 56ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 394ms (compile: 201ms, proxy.ts: 45ms, render: 148ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 407ms (compile: 257ms, proxy.ts: 50ms, render: 99ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 503ms (compile: 173ms, proxy.ts: 26ms, render: 304ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 144ms (compile: 73ms, proxy.ts: 11ms, render: 59ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 261ms (compile: 153ms, proxy.ts: 22ms, render: 86ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 564ms (compile: 231ms, proxy.ts: 34ms, render: 299ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 619ms (compile: 265ms, proxy.ts: 42ms, render: 312ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 494ms (compile: 327ms, proxy.ts: 49ms, render: 118ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 440ms (compile: 223ms, proxy.ts: 50ms, render: 168ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 336ms (compile: 168ms, proxy.ts: 31ms, render: 136ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 401ms (compile: 251ms, proxy.ts: 36ms, render: 114ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 249ms (compile: 141ms, proxy.ts: 30ms, render: 78ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 297ms (compile: 173ms, proxy.ts: 37ms, render: 87ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 371ms (compile: 222ms, proxy.ts: 52ms, render: 97ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 177ms (compile: 111ms, proxy.ts: 16ms, render: 51ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 166ms (compile: 123ms, proxy.ts: 15ms, render: 28ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 272ms (compile: 136ms, proxy.ts: 32ms, render: 104ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 428ms (compile: 277ms, proxy.ts: 68ms, render: 84ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 202ms (compile: 111ms, proxy.ts: 17ms, render: 74ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 284ms (compile: 210ms, proxy.ts: 23ms, render: 51ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 159ms (compile: 69ms, proxy.ts: 42ms, render: 48ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 160ms (compile: 100ms, proxy.ts: 11ms, render: 49ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 163ms (compile: 87ms, proxy.ts: 32ms, render: 45ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 138ms (compile: 96ms, proxy.ts: 11ms, render: 31ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 179ms (compile: 106ms, proxy.ts: 27ms, render: 45ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 249ms (compile: 162ms, proxy.ts: 17ms, render: 70ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 122ms (compile: 65ms, proxy.ts: 18ms, render: 40ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 372ms (compile: 227ms, proxy.ts: 67ms, render: 77ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 178ms (compile: 102ms, proxy.ts: 16ms, render: 59ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 247ms (compile: 157ms, proxy.ts: 22ms, render: 69ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 182ms (compile: 97ms, proxy.ts: 18ms, render: 66ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 248ms (compile: 149ms, proxy.ts: 18ms, render: 82ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 139ms (compile: 71ms, proxy.ts: 12ms, render: 56ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 239ms (compile: 159ms, proxy.ts: 16ms, render: 64ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 308ms (compile: 157ms, proxy.ts: 29ms, render: 122ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 920ms (compile: 805ms, proxy.ts: 69ms, render: 46ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 128ms (compile: 70ms, proxy.ts: 13ms, render: 45ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 189ms (compile: 126ms, proxy.ts: 16ms, render: 47ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 144ms (compile: 76ms, proxy.ts: 17ms, render: 51ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 282ms (compile: 187ms, proxy.ts: 14ms, render: 81ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 202ms (compile: 138ms, proxy.ts: 18ms, render: 46ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 141ms (compile: 78ms, proxy.ts: 14ms, render: 49ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 121ms (compile: 69ms, proxy.ts: 12ms, render: 41ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 179ms (compile: 105ms, proxy.ts: 17ms, render: 57ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 163ms (compile: 85ms, proxy.ts: 21ms, render: 57ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 167ms (compile: 99ms, proxy.ts: 20ms, render: 48ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 339ms (compile: 188ms, proxy.ts: 26ms, render: 126ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 367ms (compile: 250ms, proxy.ts: 56ms, render: 61ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 279ms (compile: 131ms, proxy.ts: 17ms, render: 131ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 294ms (compile: 173ms, proxy.ts: 37ms, render: 84ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 217ms (compile: 96ms, proxy.ts: 6ms, render: 115ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 211ms (compile: 122ms, proxy.ts: 20ms, render: 68ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 133ms (compile: 76ms, proxy.ts: 9ms, render: 48ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 213ms (compile: 120ms, proxy.ts: 12ms, render: 81ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 158ms (compile: 96ms, proxy.ts: 14ms, render: 48ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 137ms (compile: 78ms, proxy.ts: 14ms, render: 45ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 162ms (compile: 83ms, proxy.ts: 15ms, render: 64ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 200ms (compile: 120ms, proxy.ts: 29ms, render: 51ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 92ms (compile: 59ms, proxy.ts: 7ms, render: 26ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 107ms (compile: 62ms, proxy.ts: 9ms, render: 36ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 117ms (compile: 62ms, proxy.ts: 10ms, render: 44ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 126ms (compile: 67ms, proxy.ts: 10ms, render: 49ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 167ms (compile: 91ms, proxy.ts: 14ms, render: 62ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 148ms (compile: 84ms, proxy.ts: 14ms, render: 50ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 132ms (compile: 67ms, proxy.ts: 13ms, render: 52ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 240ms (compile: 143ms, proxy.ts: 19ms, render: 78ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 285ms (compile: 135ms, proxy.ts: 26ms, render: 124ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 255ms (compile: 108ms, proxy.ts: 78ms, render: 68ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 188ms (compile: 94ms, proxy.ts: 17ms, render: 77ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 220ms (compile: 162ms, proxy.ts: 8ms, render: 50ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 113ms (compile: 57ms, proxy.ts: 15ms, render: 41ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 120ms (compile: 56ms, proxy.ts: 12ms, render: 51ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 282ms (compile: 181ms, proxy.ts: 13ms, render: 88ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 286ms (compile: 227ms, proxy.ts: 17ms, render: 41ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 149ms (compile: 79ms, proxy.ts: 15ms, render: 54ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 167ms (compile: 74ms, proxy.ts: 15ms, render: 78ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 386ms (compile: 260ms, proxy.ts: 21ms, render: 104ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 479ms (compile: 413ms, proxy.ts: 23ms, render: 43ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 218ms (compile: 83ms, proxy.ts: 22ms, render: 112ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 101ms (compile: 56ms, proxy.ts: 8ms, render: 37ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 106ms (compile: 62ms, proxy.ts: 8ms, render: 36ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 177ms (compile: 113ms, proxy.ts: 11ms, render: 53ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 195ms (compile: 105ms, proxy.ts: 27ms, render: 62ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 268ms (compile: 174ms, proxy.ts: 19ms, render: 76ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 187ms (compile: 108ms, proxy.ts: 18ms, render: 60ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 222ms (compile: 159ms, proxy.ts: 15ms, render: 48ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 201ms (compile: 101ms, proxy.ts: 40ms, render: 60ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 261ms (compile: 159ms, proxy.ts: 16ms, render: 86ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 213ms (compile: 99ms, proxy.ts: 21ms, render: 94ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 244ms (compile: 117ms, proxy.ts: 43ms, render: 84ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 138ms (compile: 81ms, proxy.ts: 22ms, render: 34ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 106ms (compile: 56ms, proxy.ts: 8ms, render: 43ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 173ms (compile: 97ms, proxy.ts: 18ms, render: 58ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 163ms (compile: 104ms, proxy.ts: 13ms, render: 46ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 205ms (compile: 107ms, proxy.ts: 16ms, render: 81ms)
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 280ms (compile: 134ms, proxy.ts: 60ms, render: 85ms)
+ ✓ Compiled in 2.5s
+ ⨯ ./components/app-sidebar.tsx:209:3
+Parsing ecmascript source code failed
+[0m [90m 207 |[39m       [33m<[39m[33mSidebarRail[39m [33m/[39m[33m>[39m
+ [90m 208 |[39m     [33m<[39m[33m/[39m[33mSidebar[39m[33m>[39m
+[31m[1m>[22m[39m[90m 209 |[39m   )[33m;[39m
+ [90m     |[39m   [31m[1m^[22m[39m
+ [90m 210 |[39m }
+ [90m 211 |[39m[0m
+
+Expected '</', got ')'
+
+Import traces:
+  Client Component Browser:
+    ./components/app-sidebar.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Client Component Browser]
+    ./app/(pages)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/app-sidebar.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Client Component SSR]
+    ./app/(pages)/layout.tsx [Server Component]
+
+
+ GET /settings 500 in 531ms (compile: 268ms, proxy.ts: 51ms, render: 212ms)
+ ✓ Compiled in 2.2s
+ GET /settings 200 in 3.9s (compile: 2.2s, proxy.ts: 19ms, render: 1659ms)
+ GET /api/auth/me 404 in 2.4s (compile: 915ms, render: 1481ms)
+ GET /api/auth/me 404 in 1054ms (compile: 91ms, render: 963ms)
+ GET /settings 200 in 287ms (compile: 47ms, proxy.ts: 12ms, render: 228ms)
+ GET /api/auth/me 404 in 303ms (compile: 114ms, render: 189ms)
+ GET /api/auth/me 404 in 274ms (compile: 54ms, render: 220ms)
+ GET /settings 200 in 101ms (compile: 7ms, proxy.ts: 44ms, render: 49ms)
+ GET /login 200 in 376ms (compile: 91ms, proxy.ts: 21ms, render: 264ms)
+ GET /login?redirect=%2Fsettings 200 in 386ms (compile: 206ms, proxy.ts: 19ms, render: 161ms)
+ GET /login 200 in 131ms (compile: 19ms, proxy.ts: 6ms, render: 106ms)
+ GET /login?redirect=%2Fsettings 200 in 146ms (compile: 9ms, proxy.ts: 11ms, render: 126ms)
+ GET /login?redirect=%2Fsettings 200 in 76ms (compile: 9ms, proxy.ts: 8ms, render: 60ms)
+ GET /login 200 in 326ms (compile: 11ms, proxy.ts: 15ms, render: 300ms)
+[AUTH] Login attempt for username: admin.hr
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: admin.hr
+[MOCK LDAP] ✓ User validated: admin.hr
+[AUTH] ✓ LDAP validated username: admin.hr
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: System Admin (HR001)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for admin.hr
+ POST /api/auth 200 in 565ms (compile: 202ms, render: 363ms)
+ GET /dashboard 200 in 1560ms (compile: 267ms, proxy.ts: 14ms, render: 1279ms)
+ GET /dashboard 200 in 1010ms (compile: 80ms, proxy.ts: 117ms, render: 813ms)
+ GET /api/dashboard/metrics 200 in 570ms (compile: 162ms, render: 407ms)
+ GET /api/dashboard/metrics 200 in 70ms (compile: 20ms, render: 50ms)
+ GET /employees/new 200 in 2.4s (compile: 1746ms, proxy.ts: 10ms, render: 689ms)
+ GET /demands 200 in 1013ms (compile: 715ms, proxy.ts: 14ms, render: 283ms)
+ GET /dashboard 200 in 99ms (compile: 20ms, proxy.ts: 24ms, render: 55ms)
+ GET /api/dashboard/metrics 200 in 57ms (compile: 7ms, render: 50ms)
+ GET /api/dashboard/metrics 200 in 56ms (compile: 9ms, render: 47ms)
+ GET /allocations 200 in 371ms (compile: 195ms, proxy.ts: 7ms, render: 169ms)
+ GET /tasks 200 in 386ms (compile: 239ms, proxy.ts: 8ms, render: 139ms)
+ GET /api/tasks?action=list 200 in 165ms (compile: 118ms, render: 47ms)
+ GET /api/tasks?action=list 200 in 49ms (compile: 18ms, render: 31ms)
+ GET /demands 200 in 60ms (compile: 5ms, proxy.ts: 7ms, render: 48ms)
+ GET /allocations 200 in 72ms (compile: 8ms, proxy.ts: 6ms, render: 58ms)
+ GET /approvals 200 in 1194ms (compile: 978ms, proxy.ts: 6ms, render: 211ms)
+ GET /demands 200 in 117ms (compile: 11ms, proxy.ts: 7ms, render: 100ms)
+ GET /employees 200 in 525ms (compile: 196ms, proxy.ts: 5ms, render: 324ms)
+ GET /allocations 200 in 83ms (compile: 10ms, proxy.ts: 16ms, render: 57ms)
+ GET /demands 200 in 57ms (compile: 5ms, proxy.ts: 5ms, render: 48ms)
+ GET /approvals 200 in 57ms (compile: 5ms, proxy.ts: 5ms, render: 46ms)
+ GET /demands 200 in 95ms (compile: 7ms, proxy.ts: 8ms, render: 80ms)
+ GET /employees 200 in 94ms (compile: 10ms, proxy.ts: 5ms, render: 79ms)
+ GET /allocations 200 in 71ms (compile: 5ms, proxy.ts: 7ms, render: 59ms)
+ GET /tasks 200 in 84ms (compile: 15ms, proxy.ts: 17ms, render: 52ms)
+ GET /api/tasks?action=list 200 in 92ms (compile: 5ms, render: 87ms)
+ GET /api/tasks?action=list 200 in 34ms (compile: 11ms, render: 23ms)
+ GET /allocations 200 in 92ms (compile: 10ms, proxy.ts: 8ms, render: 74ms)
+ GET /approvals 200 in 64ms (compile: 7ms, proxy.ts: 5ms, render: 52ms)
+ GET /employees 200 in 62ms (compile: 5ms, proxy.ts: 5ms, render: 53ms)
+ GET /demands 200 in 618ms (compile: 367ms, proxy.ts: 53ms, render: 199ms)
+ GET /skills 200 in 1603ms (compile: 1342ms, proxy.ts: 8ms, render: 252ms)
+ GET /projects 200 in 437ms (compile: 233ms, proxy.ts: 7ms, render: 197ms)
+ GET /reports 200 in 830ms (compile: 328ms, proxy.ts: 5ms, render: 497ms)
+ GET /logs 200 in 3.1s (compile: 2.7s, proxy.ts: 116ms, render: 220ms)
+ GET /dashboard 200 in 159ms (compile: 38ms, proxy.ts: 38ms, render: 84ms)
+ GET /api/dashboard/metrics 200 in 556ms (compile: 36ms, render: 521ms)
+ GET /api/dashboard/metrics 200 in 120ms (compile: 21ms, render: 99ms)
+ GET /skills 200 in 98ms (compile: 14ms, proxy.ts: 29ms, render: 55ms)
+ GET /settings 200 in 55ms (compile: 12ms, proxy.ts: 5ms, render: 39ms)
+ GET /api/auth/me 404 in 437ms (compile: 147ms, render: 290ms)
+ GET /api/auth/me 404 in 392ms (compile: 61ms, render: 332ms)
+ GET /reports 200 in 109ms (compile: 20ms, proxy.ts: 22ms, render: 67ms)
+ GET /demands 200 in 95ms (compile: 26ms, proxy.ts: 6ms, render: 64ms)
+ GET /dashboard 200 in 643ms (compile: 439ms, proxy.ts: 108ms, render: 96ms)
+ GET /api/dashboard/metrics 200 in 499ms (compile: 47ms, render: 452ms)
+ GET /api/dashboard/metrics 200 in 49ms (compile: 10ms, render: 39ms)
+ GET /approvals 200 in 427ms (compile: 41ms, proxy.ts: 12ms, render: 374ms)
+ GET /api/dashboard/metrics 200 in 123ms (compile: 29ms, render: 94ms)
+ GET /api/dashboard/metrics 200 in 97ms (compile: 9ms, render: 88ms)
+ GET /demands 200 in 318ms (compile: 35ms, proxy.ts: 67ms, render: 216ms)
+ GET /api/dashboard/metrics 200 in 51ms (compile: 14ms, render: 37ms)
+ GET /api/dashboard/metrics 200 in 68ms (compile: 18ms, render: 50ms)
+ GET /employees/new 200 in 111ms (compile: 27ms, proxy.ts: 21ms, render: 63ms)
+ GET /api/dashboard/metrics 200 in 76ms (compile: 12ms, render: 64ms)
+ GET /api/dashboard/metrics 200 in 61ms (compile: 5ms, render: 56ms)
+ GET /settings 200 in 64ms (compile: 12ms, proxy.ts: 10ms, render: 43ms)
+ GET /api/auth/me 404 in 426ms (compile: 158ms, render: 268ms)
+ GET /api/auth/me 404 in 204ms (compile: 69ms, render: 135ms)
+ GET /login?redirect=%2Fsettings 200 in 137ms (compile: 50ms, proxy.ts: 18ms, render: 70ms)
+ GET /login 200 in 151ms (compile: 21ms, proxy.ts: 22ms, render: 108ms)
+ GET /login 200 in 46ms (compile: 8ms, proxy.ts: 6ms, render: 32ms)
+[AUTH] Login attempt for username: alice.smith
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: alice.smith
+[MOCK LDAP] ✓ User validated: alice.smith
+[AUTH] ✓ LDAP validated username: alice.smith
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: Alice Smith (DEV001)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for alice.smith
+ POST /api/auth 200 in 285ms (compile: 47ms, render: 237ms)
+ GET /settings 200 in 245ms (compile: 20ms, proxy.ts: 14ms, render: 211ms)
+ GET /settings 200 in 154ms (compile: 16ms, proxy.ts: 9ms, render: 130ms)
+ GET /api/auth/me 404 in 405ms (compile: 66ms, render: 339ms)
+ GET /api/auth/me 404 in 188ms (compile: 27ms, render: 160ms)
+ GET /dashboard 200 in 57ms (compile: 10ms, proxy.ts: 5ms, render: 42ms)
+ GET /api/dashboard/metrics 200 in 76ms (compile: 11ms, render: 65ms)
+ GET /api/dashboard/metrics 200 in 63ms (compile: 6ms, render: 57ms)
+ GET /logs 200 in 95ms (compile: 26ms, proxy.ts: 12ms, render: 57ms)
+ GET /api/dashboard/metrics 200 in 35ms (compile: 8ms, render: 27ms)
+ GET /api/dashboard/metrics 200 in 45ms (compile: 9ms, render: 36ms)
+ GET /logs 200 in 64ms (compile: 7ms, proxy.ts: 10ms, render: 46ms)
+ GET /api/dashboard/metrics 200 in 36ms (compile: 7ms, render: 29ms)
+ GET /api/dashboard/metrics 200 in 53ms (compile: 20ms, render: 33ms)
+ GET /projects 200 in 70ms (compile: 10ms, proxy.ts: 6ms, render: 54ms)
+ GET /api/dashboard/metrics 200 in 36ms (compile: 8ms, render: 28ms)
+ GET /api/dashboard/metrics 200 in 32ms (compile: 8ms, render: 24ms)
+ GET /login 200 in 154ms (compile: 15ms, proxy.ts: 8ms, render: 131ms)
+ GET /login?redirect=%2Fdashboard 200 in 152ms (compile: 63ms, proxy.ts: 8ms, render: 81ms)
+ GET /login 200 in 50ms (compile: 7ms, proxy.ts: 7ms, render: 36ms)
+[AUTH] Login attempt for username: charlie.williams
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: charlie.williams
+[MOCK LDAP] ✓ User validated: charlie.williams
+[AUTH] ✓ LDAP validated username: charlie.williams
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: Charlie Williams (DEV003)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for charlie.williams
+ POST /api/auth 200 in 165ms (compile: 15ms, render: 151ms)
+ GET /dashboard 200 in 233ms (compile: 19ms, proxy.ts: 19ms, render: 194ms)
+ GET /dashboard 200 in 150ms (compile: 29ms, proxy.ts: 18ms, render: 103ms)
+ GET /api/dashboard/metrics 200 in 78ms (compile: 34ms, render: 45ms)
+ GET /api/dashboard/metrics 200 in 70ms (compile: 13ms, render: 57ms)
+ GET /tasks 200 in 53ms (compile: 12ms, proxy.ts: 5ms, render: 37ms)
+ GET /api/tasks?action=list 200 in 73ms (compile: 13ms, render: 60ms)
+ GET /api/tasks?action=list 200 in 34ms (compile: 5ms, render: 29ms)
+ GET /projects 200 in 109ms (compile: 9ms, proxy.ts: 10ms, render: 90ms)
+ GET /login 200 in 204ms (compile: 18ms, proxy.ts: 12ms, render: 174ms)
+ GET /login?redirect=%2Fprojects 200 in 237ms (compile: 56ms, proxy.ts: 15ms, render: 165ms)
+ GET /login 200 in 150ms (compile: 14ms, proxy.ts: 9ms, render: 127ms)
+[AUTH] Login attempt for username: alice.smith
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: alice.smith
+[MOCK LDAP] ✓ User validated: alice.smith
+[AUTH] ✓ LDAP validated username: alice.smith
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: Alice Smith (DEV001)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for alice.smith
+ POST /api/auth 200 in 196ms (compile: 11ms, render: 185ms)
+ GET /projects 200 in 1227ms (compile: 21ms, proxy.ts: 30ms, render: 1176ms)
+ GET /projects 200 in 1179ms (compile: 80ms, proxy.ts: 67ms, render: 1032ms)
+ GET /dashboard 200 in 254ms (compile: 82ms, proxy.ts: 27ms, render: 144ms)
+ GET /api/dashboard/metrics 200 in 186ms (compile: 18ms, render: 167ms)
+ GET /api/dashboard/metrics 200 in 70ms (compile: 23ms, render: 46ms)
+ GET /login?redirect=%2Fdashboard 200 in 589ms (compile: 388ms, proxy.ts: 19ms, render: 183ms)
+ GET /login 200 in 621ms (compile: 306ms, proxy.ts: 36ms, render: 279ms)
+ GET /login 200 in 183ms (compile: 24ms, proxy.ts: 7ms, render: 153ms)
+[AUTH] Login attempt for username: admin.hr
+[AUTH] Step 1: Validating with LDAP...
+[MOCK LDAP] Validating user: admin.hr
+[MOCK LDAP] ✓ User validated: admin.hr
+[AUTH] ✓ LDAP validated username: admin.hr
+[AUTH] Step 2: Fetching user from database...
+[AUTH] ✓ Found user: System Admin (HR001)
+[AUTH] Step 3: Generating JWT token...
+[AUTH] ✓ Login successful for admin.hr
+ POST /api/auth 200 in 891ms (compile: 339ms, render: 552ms)
+ GET /dashboard 200 in 315ms (compile: 16ms, proxy.ts: 104ms, render: 194ms)
+ GET /dashboard 200 in 145ms (compile: 16ms, proxy.ts: 9ms, render: 120ms)
+ GET /api/dashboard/metrics 200 in 103ms (compile: 38ms, render: 65ms)
+ GET /api/dashboard/metrics 200 in 88ms (compile: 7ms, render: 81ms)
+ GET /login 200 in 442ms (compile: 61ms, proxy.ts: 26ms, render: 354ms)
+ GET /login?redirect=%2Fdashboard 200 in 446ms (compile: 215ms, proxy.ts: 23ms, render: 208ms)
+ GET /login 200 in 146ms (compile: 15ms, proxy.ts: 5ms, render: 125ms)

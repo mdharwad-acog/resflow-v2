@@ -1,3 +1,18 @@
+/**
+ * Demands API Routes
+ *
+ * POST /api/demands - Create new demand
+ * GET /api/demands?id={id} - Get single demand by ID ✓ IMPLEMENTED
+ * GET /api/demands - List demands with filters
+ * PUT /api/demands - Update demand (PM: REQUESTED status only)
+ *
+ * Allowed Roles:
+ * - POST: project_manager (own projects), hr_executive (all)
+ * - GET single: project_manager (own), hr_executive (all)
+ * - GET list: project_manager (own), hr_executive (all)
+ * - PUT: project_manager (own, REQUESTED only)
+ */
+
 // POST /api/demands/create
 // Allowed Roles: project_manager, hr_executive
 // Accept: { project_id, role_required, skill_ids: string[], start_date }

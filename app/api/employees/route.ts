@@ -1,7 +1,7 @@
 // POST /api/employees/create
 // Allowed Roles: hr_executive
 // Check JWT role = 'hr_executive', else return 403
-// Accept: { employee_code, ldap_username, full_name, email, employee_type, employee_role, employee_design, working_location, department_id, project_manager_id, experience_years, resume_url, college, degree, joined_on }
+// Accept: { employee_code, ldap_username, full_name, email, gender, employee_type, employee_role, employee_design, working_location, department_id, reporting_manager_id, experience_years, resume_url, college, degree, educational_stream, joined_on }
 // Check employee_code uniqueness, return 400 "employee_code already exists" if exists
 // Check ldap_username uniqueness, return 400 "ldap_username already exists" if exists
 // INSERT into employees table with status = 'ACTIVE'
@@ -13,11 +13,11 @@
 // Data Filtering:
 //   - employee: Returns list with ONLY (id, employee_code, full_name, email, employee_design)
 //   - project_manager: Returns list with ONLY (id, employee_code, full_name, email, employee_design)
-//   - hr_executive: Returns full data (all fields)
+//   - hr_executive: Returns full data (all fields) + reporting_manager_name
 // SELECT * FROM employees WHERE filters applied
 // Apply pagination using LIMIT and OFFSET
 // Return (employee/project_manager): { employees: [{ id, employee_code, full_name, email, employee_design }], total, page, limit }
-// Return (hr_executive): { employees: [{ id, employee_code, ldap_username, full_name, email, employee_type, employee_role, employee_design, working_location, department_id, project_manager_id, status, joined_on, exited_on }], total, page, limit }
+// Return (hr_executive): { employees: [{ id, employee_code, ldap_username, full_name, email, gender, employee_type, employee_role, employee_design, working_location, department_id, reporting_manager_id, reporting_manager_name, status, joined_on, exited_on }], total, page, limit }
 
 // GET /api/employees/get
 // Allowed Roles: employee, project_manager, hr_executive
@@ -27,14 +27,14 @@
 //   - project_manager: Can view WHERE id = current_user_id OR id IN (SELECT emp_id FROM project_allocation WHERE project_id IN (SELECT id FROM projects WHERE project_manager_id = current_user_id)), else return 403
 //   - hr_executive: Can view any employee
 // SELECT * FROM employees WHERE id = ?
-// Return: { id, employee_code, ldap_username, full_name, email, employee_type, employee_role, employee_design, working_location, department_id, project_manager_id, experience_years, resume_url, college, degree, status, joined_on, exited_on }
+// Return: { id, employee_code, ldap_username, full_name, email, gender, employee_type, employee_role, employee_design, working_location, department_id, reporting_manager_id, reporting_manager_name, experience_years, resume_url, college, degree, educational_stream, status, joined_on, exited_on, project_managers: [{ project_id, project_name, manager_id, manager_name }] }
 // Error 403 if access denied
 // Error 404 if employee not found
 
 // PUT /api/employees/update
 // Allowed Roles: hr_executive
 // Check JWT role = 'hr_executive', else return 403
-// Accept: { id, full_name, email, employee_type, employee_role, employee_design, working_location, department_id, project_manager_id, experience_years, resume_url, college, degree }
+// Accept: { id, full_name, email, gender, employee_type, employee_role, employee_design, working_location, department_id, reporting_manager_id, experience_years, resume_url, college, degree, educational_stream }
 // Do NOT allow updating employee_code (return 400 "Cannot update employee_code")
 // Do NOT allow updating ldap_username (return 400 "Cannot update ldap_username")
 // UPDATE employees SET fields WHERE id = ?
@@ -70,16 +70,18 @@ export async function POST(req: NextRequest) {
       ldap_username,
       full_name,
       email,
+      gender,
       employee_type,
       employee_role,
       employee_design,
       working_location,
       department_id,
-      project_manager_id,
+      reporting_manager_id,
       experience_years,
       resume_url,
       college,
       degree,
+      educational_stream,
       joined_on,
     } = body;
 
@@ -124,16 +126,18 @@ export async function POST(req: NextRequest) {
         ldap_username,
         full_name,
         email,
+        gender,
         employee_type,
         employee_role,
         employee_design,
         working_location,
         department_id,
-        project_manager_id,
+        reporting_manager_id,
         experience_years: experience_years?.toString(),
         resume_url,
         college,
         degree,
+        educational_stream,
         status: "ACTIVE",
         joined_on: toDateString(joined_on)!,
       })
@@ -241,7 +245,40 @@ async function handleGetEmployee(
     return ErrorResponses.notFound("Employee");
   }
 
-  return successResponse(employee);
+  // Fetch reporting manager name if exists
+  let reporting_manager_name = null;
+  if (employee.reporting_manager_id) {
+    const [manager] = await db
+      .select({ full_name: schema.employees.full_name })
+      .from(schema.employees)
+      .where(eq(schema.employees.id, employee.reporting_manager_id));
+    reporting_manager_name = manager?.full_name || null;
+  }
+
+  // Fetch project managers (from project allocations)
+  const project_managers = await db
+    .select({
+      project_id: schema.projects.id,
+      project_name: schema.projects.project_name,
+      manager_id: schema.projects.project_manager_id,
+      manager_name: schema.employees.full_name,
+    })
+    .from(schema.projectAllocation)
+    .innerJoin(
+      schema.projects,
+      eq(schema.projectAllocation.project_id, schema.projects.id),
+    )
+    .innerJoin(
+      schema.employees,
+      eq(schema.projects.project_manager_id, schema.employees.id),
+    )
+    .where(eq(schema.projectAllocation.emp_id, id));
+
+  return successResponse({
+    ...employee,
+    reporting_manager_name,
+    project_managers,
+  });
 }
 
 async function handleListEmployees(
@@ -318,16 +355,18 @@ export async function PUT(req: NextRequest) {
       ldap_username,
       full_name,
       email,
+      gender,
       employee_type,
       employee_role,
       employee_design,
       working_location,
       department_id,
-      project_manager_id,
+      reporting_manager_id,
       experience_years,
       resume_url,
       college,
       degree,
+      educational_stream,
     } = body;
 
     if (!id) {
@@ -358,6 +397,7 @@ export async function PUT(req: NextRequest) {
 
     if (full_name !== undefined) updateData.full_name = full_name;
     if (email !== undefined) updateData.email = email;
+    if (gender !== undefined) updateData.gender = gender;
     if (employee_type !== undefined) updateData.employee_type = employee_type;
     if (employee_role !== undefined) updateData.employee_role = employee_role;
     if (employee_design !== undefined)
@@ -365,13 +405,15 @@ export async function PUT(req: NextRequest) {
     if (working_location !== undefined)
       updateData.working_location = working_location;
     if (department_id !== undefined) updateData.department_id = department_id;
-    if (project_manager_id !== undefined)
-      updateData.project_manager_id = project_manager_id;
+    if (reporting_manager_id !== undefined)
+      updateData.reporting_manager_id = reporting_manager_id;
     if (experience_years !== undefined)
       updateData.experience_years = experience_years.toString();
     if (resume_url !== undefined) updateData.resume_url = resume_url;
     if (college !== undefined) updateData.college = college;
     if (degree !== undefined) updateData.degree = degree;
+    if (educational_stream !== undefined)
+      updateData.educational_stream = educational_stream;
 
     const [updated] = await db
       .update(schema.employees)

@@ -10,7 +10,20 @@ import {
 } from "@/lib/api-helpers";
 import { eq, and, inArray, or } from "drizzle-orm";
 
-// POST /api/tasks/create - Create new task
+/**
+ * Tasks API Routes
+ *
+ * POST /api/tasks - Create new task
+ * GET /api/tasks?id={id} - Get single task by ID
+ * GET /api/tasks - List tasks with filters
+ *
+ * Allowed Roles:
+ * - POST: project_manager, hr_executive
+ * - GET single: employee (own), project_manager (team), hr_executive (all)
+ * - GET list: employee (own), project_manager (team), hr_executive (all)
+ */
+
+// POST /api/tasks - Create new task
 async function handleCreate(req: NextRequest) {
   const user = await getCurrentUser(req);
 

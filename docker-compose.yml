@@ -13,6 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d
       - ./backups:/backups
+      - ./data:/data
     ports:
       - "5432:5432"
     networks:
