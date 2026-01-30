@@ -287,6 +287,8 @@ async function handleListEmployees(
 ) {
   const status = searchParams.get("status");
   const department_id = searchParams.get("department_id");
+  const role = searchParams.get("role");
+  const search = searchParams.get("search");
   const { page, limit, offset } = getPaginationParams(new URL(req.url));
 
   const whereConditions: any[] = [];
@@ -297,6 +299,23 @@ async function handleListEmployees(
 
   if (department_id) {
     whereConditions.push(eq(schema.employees.department_id, department_id));
+  }
+
+  if (role) {
+    whereConditions.push(eq(schema.employees.employee_role, role as any));
+  }
+
+  // Add search condition - search across multiple fields
+  if (search) {
+    const searchLower = search.toLowerCase();
+    whereConditions.push(
+      or(
+        sql`LOWER(${schema.employees.full_name}) LIKE ${`%${searchLower}%`}`,
+        sql`LOWER(${schema.employees.email}) LIKE ${`%${searchLower}%`}`,
+        sql`LOWER(${schema.employees.employee_code}) LIKE ${`%${searchLower}%`}`,
+        sql`LOWER(${schema.employees.ldap_username}) LIKE ${`%${searchLower}%`}`,
+      ),
+    );
   }
 
   const whereClause =
@@ -328,6 +347,8 @@ async function handleListEmployees(
         full_name: schema.employees.full_name,
         email: schema.employees.email,
         employee_design: schema.employees.employee_design,
+        employee_role: schema.employees.employee_role,
+        status: schema.employees.status,
       })
       .from(schema.employees)
       .where(whereClause)

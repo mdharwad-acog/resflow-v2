@@ -10,7 +10,7 @@ import {
   getPaginationParams,
   buildAuditFilters,
 } from "@/lib/api-helpers";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, sql, gte, lt } from "drizzle-orm";
 
 // GET /api/audit/list
 export async function GET(req: NextRequest) {
@@ -26,7 +26,13 @@ export async function GET(req: NextRequest) {
     const { page, limit, offset } = getPaginationParams(url);
 
     // Build filters from query parameters
-    const filters = buildAuditFilters(url.searchParams, { eq, and });
+    const filters = buildAuditFilters(url.searchParams, {
+      eq,
+      and,
+      gte,
+      lt,
+      sql,
+    });
 
     // Get total count with filters
     const total = await getCount(

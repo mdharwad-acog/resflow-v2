@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -19,10 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DataTable, Column } from "@/components/data-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PaginationControls } from "@/components/pagination-controls";
+import { EmptyState } from "@/components/empty-state";
 import { RequestSkillModal } from "@/components/forms/request-skill-modal";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
+import { Plus, Search, FileText } from "lucide-react";
 import { LoadingPage } from "@/components/loading-spinner";
 
 interface Skill {
@@ -51,46 +61,87 @@ function SkillsContent() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
+
+  // Search and pagination state
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(20);
+  const [total, setTotal] = useState(0);
+
+  const [selectedDepartment, setSelectedDepartment] = useState<
+    string | undefined
+  >(undefined);
   const [requestModalOpen, setRequestModalOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
-  const fetchData = async () => {
+  // Fetch departments only once
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  // Fetch skills when filters, search or page changes
+  useEffect(() => {
+    fetchSkills();
+  }, [selectedDepartment, searchQuery, currentPage]);
+
+  const handleSearch = () => {
+    setSearchQuery(searchInput);
+    setCurrentPage(1);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const fetchDepartments = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-
-      // Fetch skills
-      const skillsResponse = await fetch("/api/skills", {
+      const response = await fetch("/api/departments", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!skillsResponse.ok) {
+      if (response.ok) {
+        const data = await response.json();
+        setDepartments(data.departments || []);
+      }
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("auth_token");
+      const params = new URLSearchParams();
+
+      if (selectedDepartment)
+        params.append("department_name", selectedDepartment);
+      if (searchQuery) params.append("search", searchQuery);
+      params.append("page", currentPage.toString());
+      params.append("limit", pageSize.toString());
+
+      const response = await fetch(`/api/skills?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
         throw new Error("Failed to fetch skills");
       }
 
-      const skillsData = await skillsResponse.json();
-      setSkills(skillsData.skills || []);
-
-      // Fetch departments for filter
-      const deptsResponse = await fetch("/api/departments", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (deptsResponse.ok) {
-        const deptsData = await deptsResponse.json();
-        setDepartments(deptsData.departments || []);
-      }
+      const data = await response.json();
+      setSkills(data.skills || []);
+      setTotal(data.total || 0);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching skills:", error);
       toast.error("Failed to load skills");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleRequestSkill = (skill: Skill) => {
     setSelectedSkill(skill);
@@ -99,30 +150,8 @@ function SkillsContent() {
 
   const handleRequestSuccess = () => {
     toast.info("You can view your pending requests in the approvals section");
-    fetchData();
+    fetchSkills();
   };
-
-  // Filter skills by department
-  const filteredSkills =
-    selectedDepartment === "all"
-      ? skills
-      : skills.filter((skill) => skill.department_name === selectedDepartment);
-
-  const columns: Column<Skill>[] = [
-    {
-      key: "skill_name",
-      header: "Skill Name",
-    },
-    {
-      key: "department_name",
-      header: "Department",
-    },
-    {
-      key: "created_at",
-      header: "Created At",
-      render: (skill) => new Date(skill.created_at).toLocaleDateString(),
-    },
-  ];
 
   if (loading) {
     return <LoadingPage />;
@@ -152,44 +181,99 @@ function SkillsContent() {
       <div className="container mx-auto px-4 py-8">
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>All Skills</CardTitle>
-                <CardDescription>
-                  Click on any skill to request it for your profile
-                </CardDescription>
+            <CardTitle>All Skills</CardTitle>
+            <CardDescription>
+              Click on any skill to request it for your profile
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Search</label>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Search by skill name or department..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                  />
+                  <Button onClick={handleSearch} size="icon">
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              {/* Department Filter */}
-              <div className="w-[200px]">
-                <Select
-                  value={selectedDepartment}
-                  onValueChange={setSelectedDepartment}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Filter by department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Departments</SelectItem>
-                    {departments.map((dept) => (
-                      <SelectItem key={dept.id} value={dept.name}>
-                        {dept.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Department</label>
+                  <Select
+                    value={selectedDepartment}
+                    onValueChange={(v) =>
+                      setSelectedDepartment(v === "all" ? undefined : v)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All departments" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Departments</SelectItem>
+                      {departments.map((dept) => (
+                        <SelectItem key={dept.id} value={dept.name}>
+                          {dept.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-          </CardHeader>
-          <CardContent>
-            <DataTable
-              data={filteredSkills}
-              columns={columns}
-              searchPlaceholder="Search skills..."
-              searchKeys={["skill_name"]}
-              onRowClick={handleRequestSkill}
-              emptyMessage="No skills found"
-              pageSize={15}
-            />
+
+            {/* Skills Table */}
+            {skills.length === 0 ? (
+              <EmptyState
+                icon={<FileText className="h-10 w-10 text-muted-foreground" />}
+                title="No skills found"
+                description="Try adjusting your search criteria or add a new skill"
+              />
+            ) : (
+              <>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Skill Name</TableHead>
+                        <TableHead>Department</TableHead>
+                        <TableHead>Created At</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {skills.map((skill) => (
+                        <TableRow
+                          key={skill.id}
+                          className="cursor-pointer"
+                          onClick={() => handleRequestSkill(skill)}
+                        >
+                          <TableCell className="font-medium">
+                            {skill.skill_name}
+                          </TableCell>
+                          <TableCell>{skill.department_name}</TableCell>
+                          <TableCell>
+                            {new Date(skill.created_at).toLocaleDateString()}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+                <PaginationControls
+                  currentPage={currentPage}
+                  pageSize={pageSize}
+                  total={total}
+                  onPageChange={setCurrentPage}
+                  itemName="skills"
+                />
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

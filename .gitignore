@@ -31,3 +31,6 @@ data
 docs
 postgres
 backups
+scripts/update_ldap.sql
+app.zip
+app.backup/app

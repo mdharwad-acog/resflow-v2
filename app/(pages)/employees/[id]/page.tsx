@@ -14,6 +14,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -26,6 +34,7 @@ import {
   GraduationCap,
   FileText,
   Pencil,
+  Percent,
 } from "lucide-react";
 import { LoadingPage } from "@/components/loading-spinner";
 
@@ -54,6 +63,29 @@ interface EmployeeDetails {
   exited_on?: string;
 }
 
+interface Allocation {
+  id: string;
+  project_id: string;
+  project_code: string;
+  project_name: string;
+  role: string;
+  allocation_percentage: number;
+  is_billable: boolean;
+  start_date: string;
+  end_date?: string;
+  status: string;
+}
+
+interface Skill {
+  id: string;
+  skill_id: string;
+  skill_name: string;
+  department_name: string;
+  status: string;
+  requested_on: string;
+  approved_on?: string;
+}
+
 export default function EmployeeProfilePage() {
   return (
     <ProtectedRoute>
@@ -68,14 +100,83 @@ function EmployeeProfileContent() {
   const router = useRouter();
   const { user } = useAuth();
   const [employee, setEmployee] = useState<EmployeeDetails | null>(null);
+  const [allocations, setAllocations] = useState<Allocation[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [allocationsLoading, setAllocationsLoading] = useState(true);
+  const [skillsLoading, setSkillsLoading] = useState(true);
+  const [totalAllocation, setTotalAllocation] = useState(0);
 
   const isHR = user?.employee_role === "hr_executive";
   const isOwnProfile = user?.id === employeeId;
 
   useEffect(() => {
     fetchEmployeeDetails();
+    fetchAllocations();
+    fetchSkills();
   }, [employeeId]);
+
+  const fetchAllocations = async () => {
+    try {
+      setAllocationsLoading(true);
+      const token = localStorage.getItem("auth_token");
+
+      // Fetch active allocations
+      const response = await fetch(
+        `/api/allocations?employee_id=${employeeId}&limit=100`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const allAllocations = data.allocations || [];
+
+        // Separate active and past allocations
+        const today = new Date();
+        const activeAllocs = allAllocations.filter((a: Allocation) => {
+          const endDate = a.end_date ? new Date(a.end_date) : null;
+          return !endDate || endDate >= today;
+        });
+
+        // Calculate total current allocation
+        const total = activeAllocs.reduce(
+          (sum: number, a: Allocation) => sum + a.allocation_percentage,
+          0,
+        );
+        setTotalAllocation(total);
+        setAllocations(allAllocations);
+      }
+    } catch (error) {
+      console.error("Error fetching allocations:", error);
+    } finally {
+      setAllocationsLoading(false);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      setSkillsLoading(true);
+      const token = localStorage.getItem("auth_token");
+
+      const response = await fetch(
+        `/api/employee-skills?employee_id=${employeeId}&limit=100`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setSkills(data.skills || []);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    } finally {
+      setSkillsLoading(false);
+    }
+  };
 
   const fetchEmployeeDetails = async () => {
     try {
@@ -429,6 +530,277 @@ function EmployeeProfileContent() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Full Width Sections - Allocations and Skills */}
+        <div className="space-y-6 mt-6">
+          {/* Total Allocation Summary */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Current Workload</CardTitle>
+              <CardDescription>
+                Total allocation across all active projects
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {allocationsLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl font-bold">{totalAllocation}%</div>
+                  <div className="flex-1">
+                    <div className="h-4 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className={`h-full transition-all ${
+                          totalAllocation > 100
+                            ? "bg-destructive"
+                            : totalAllocation > 80
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
+                        }`}
+                        style={{ width: `${Math.min(totalAllocation, 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {totalAllocation > 100
+                        ? "⚠️ Over-allocated"
+                        : totalAllocation > 80
+                          ? "Near capacity"
+                          : "Available capacity"}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Current Allocations */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Current Allocations</CardTitle>
+              <CardDescription>Active project assignments</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {allocationsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+                </div>
+              ) : allocations.filter(
+                  (a) => a.end_date && new Date(a.end_date) >= new Date(),
+                ).length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No active allocations
+                </div>
+              ) : (
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Project</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Allocation %</TableHead>
+                        <TableHead>Billable</TableHead>
+                        <TableHead>Duration</TableHead>
+                        <TableHead>Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {allocations
+                        .filter(
+                          (a) =>
+                            a.end_date && new Date(a.end_date) >= new Date(),
+                        )
+                        .map((allocation) => (
+                          <TableRow key={allocation.id}>
+                            <TableCell className="font-medium">
+                              {allocation.project_name}
+                            </TableCell>
+                            <TableCell>{allocation.role || "-"}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline">
+                                {allocation.allocation_percentage}%
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              {allocation.is_billable ? (
+                                <Badge variant="default">Billable</Badge>
+                              ) : (
+                                <Badge variant="secondary">Non-billable</Badge>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {new Date(
+                                allocation.start_date,
+                              ).toLocaleDateString()}{" "}
+                              -{" "}
+                              {allocation.end_date
+                                ? new Date(
+                                    allocation.end_date,
+                                  ).toLocaleDateString()
+                                : "Ongoing"}
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={
+                                  allocation.status === "active"
+                                    ? "default"
+                                    : allocation.status === "pending"
+                                      ? "secondary"
+                                      : "outline"
+                                }
+                              >
+                                {allocation.status}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Past Projects */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Past Projects</CardTitle>
+              <CardDescription>Completed project assignments</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {allocationsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+                </div>
+              ) : allocations.filter(
+                  (a) => a.end_date && new Date(a.end_date) < new Date(),
+                ).length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No past projects
+                </div>
+              ) : (
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Project</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Allocation %</TableHead>
+                        <TableHead>Billable</TableHead>
+                        <TableHead>Duration</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {allocations
+                        .filter(
+                          (a) =>
+                            a.end_date && new Date(a.end_date) < new Date(),
+                        )
+                        .map((allocation) => (
+                          <TableRow key={allocation.id}>
+                            <TableCell className="font-medium">
+                              {allocation.project_name}
+                            </TableCell>
+                            <TableCell>{allocation.role || "-"}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline">
+                                {allocation.allocation_percentage}%
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              {allocation.is_billable ? (
+                                <Badge variant="default">Billable</Badge>
+                              ) : (
+                                <Badge variant="secondary">Non-billable</Badge>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {new Date(
+                                allocation.start_date,
+                              ).toLocaleDateString()}{" "}
+                              -{" "}
+                              {allocation.end_date
+                                ? new Date(
+                                    allocation.end_date,
+                                  ).toLocaleDateString()
+                                : "Ongoing"}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Skills */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Skills</CardTitle>
+              <CardDescription>
+                Technical skills and competencies
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {skillsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+                </div>
+              ) : skills.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No skills recorded
+                </div>
+              ) : (
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Skill</TableHead>
+                        <TableHead>Department</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Approved Date</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {skills.map((skill, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">
+                            {skill.skill_name}
+                          </TableCell>
+                          <TableCell>{skill.department_name || "-"}</TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={
+                                skill.status === "approved"
+                                  ? "default"
+                                  : skill.requested_on
+                                    ? "secondary"
+                                    : "outline"
+                              }
+                            >
+                              {skill.status === "approved"
+                                ? "Approved"
+                                : skill.requested_on
+                                  ? "Pending"
+                                  : "Not Requested"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {skill.approved_on
+                              ? new Date(skill.approved_on).toLocaleDateString()
+                              : "-"}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

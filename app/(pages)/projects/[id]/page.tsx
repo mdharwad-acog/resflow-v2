@@ -14,6 +14,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -46,6 +54,17 @@ interface ProjectDetails {
   closed_on?: string;
 }
 
+interface Allocation {
+  id: string;
+  employee_code: string;
+  employee_name: string;
+  role: string;
+  allocation_percentage: number;
+  is_billable: boolean;
+  start_date: string;
+  end_date?: string;
+}
+
 export default function ProjectDetailPage() {
   return (
     <ProtectedRoute>
@@ -60,7 +79,9 @@ function ProjectDetailContent() {
   const router = useRouter();
   const { user } = useAuth();
   const [project, setProject] = useState<ProjectDetails | null>(null);
+  const [allocations, setAllocations] = useState<Allocation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [allocationsLoading, setAllocationsLoading] = useState(true);
 
   const isHR = user?.employee_role === "hr_executive";
   const isPM = user?.employee_role === "project_manager";
@@ -68,7 +89,31 @@ function ProjectDetailContent() {
 
   useEffect(() => {
     fetchProjectDetails();
+    fetchAllocations();
   }, [projectId]);
+
+  const fetchAllocations = async () => {
+    try {
+      setAllocationsLoading(true);
+      const token = localStorage.getItem("auth_token");
+
+      const response = await fetch(
+        `/api/allocations?project_id=${projectId}&limit=100`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setAllocations(data.allocations || []);
+      }
+    } catch (error) {
+      console.error("Error fetching allocations:", error);
+    } finally {
+      setAllocationsLoading(false);
+    }
+  };
 
   const fetchProjectDetails = async () => {
     try {
@@ -289,30 +334,118 @@ function ProjectDetailContent() {
               </Card>
             )}
 
-            {/* Team Allocations - Link to Filtered View */}
+            {/* Team Allocations */}
             <Card>
               <CardHeader>
-                <CardTitle>Team Allocations</CardTitle>
-                <CardDescription>
-                  View team members allocated to this project
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <Users className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground mb-4">
-                    View detailed allocation information including team members,
-                    percentages, and timelines
-                  </p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Team Allocations</CardTitle>
+                    <CardDescription>
+                      Team members allocated to this project
+                    </CardDescription>
+                  </div>
                   <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() =>
-                      router.push(`/allocations?project=${projectId}`)
+                      router.push(`/allocations?project_id=${projectId}`)
                     }
                   >
-                    <Users className="h-4 w-4 mr-2" />
-                    View Project Allocations
+                    View All
                   </Button>
                 </div>
+              </CardHeader>
+              <CardContent>
+                {allocationsLoading ? (
+                  <div className="text-center py-8 text-sm text-muted-foreground">
+                    Loading allocations...
+                  </div>
+                ) : allocations.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Users className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground mb-4">
+                      No team members allocated to this project yet
+                    </p>
+                    {isHR && (
+                      <Button
+                        onClick={() =>
+                          router.push(`/allocations/new?project=${projectId}`)
+                        }
+                      >
+                        <Users className="h-4 w-4 mr-2" />
+                        Allocate Team Member
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Employee</TableHead>
+                          <TableHead>Role</TableHead>
+                          <TableHead>Allocation</TableHead>
+                          <TableHead>Billable</TableHead>
+                          <TableHead>Duration</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {allocations.map((allocation) => (
+                          <TableRow
+                            key={allocation.id}
+                            className="cursor-pointer"
+                            onClick={() =>
+                              router.push(`/allocations/${allocation.id}`)
+                            }
+                          >
+                            <TableCell>
+                              <div>
+                                <div className="font-medium">
+                                  {allocation.employee_name}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  {allocation.employee_code}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>{allocation.role}</TableCell>
+                            <TableCell>
+                              <Badge variant="secondary">
+                                {allocation.allocation_percentage}%
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={
+                                  allocation.is_billable ? "default" : "outline"
+                                }
+                              >
+                                {allocation.is_billable ? "Yes" : "No"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm">
+                                <div>
+                                  {new Date(
+                                    allocation.start_date,
+                                  ).toLocaleDateString()}
+                                </div>
+                                {allocation.end_date && (
+                                  <div className="text-xs text-muted-foreground">
+                                    to{" "}
+                                    {new Date(
+                                      allocation.end_date,
+                                    ).toLocaleDateString()}
+                                  </div>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

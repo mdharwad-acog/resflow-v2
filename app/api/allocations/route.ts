@@ -42,6 +42,78 @@ import { createAuditLog } from "@/lib/audit";
 import { toDateString } from "@/lib/date-utils";
 import { eq, and, or, lte, gte, sql, sum, ne, inArray } from "drizzle-orm";
 
+async function handleGetAllocation(req: NextRequest, user: any, id: string) {
+  // Check permissions
+  if (user.employee_role === "employee") {
+    // Check if this allocation belongs to the employee
+    const [allocation] = await db
+      .select({ emp_id: schema.projectAllocation.emp_id })
+      .from(schema.projectAllocation)
+      .where(eq(schema.projectAllocation.id, id))
+      .limit(1);
+
+    if (!allocation || allocation.emp_id !== user.id) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+  } else if (user.employee_role === "project_manager") {
+    // Check if this allocation is for one of their projects
+    const [allocation] = await db
+      .select({
+        project_id: schema.projectAllocation.project_id,
+        project_manager_id: schema.projects.project_manager_id,
+      })
+      .from(schema.projectAllocation)
+      .leftJoin(
+        schema.projects,
+        eq(schema.projectAllocation.project_id, schema.projects.id),
+      )
+      .where(eq(schema.projectAllocation.id, id))
+      .limit(1);
+
+    if (!allocation || allocation.project_manager_id !== user.id) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+  }
+
+  // Fetch allocation with details
+  const [allocation] = await db
+    .select({
+      id: schema.projectAllocation.id,
+      emp_id: schema.projectAllocation.emp_id,
+      employee_code: schema.employees.employee_code,
+      employee_name: schema.employees.full_name,
+      project_id: schema.projectAllocation.project_id,
+      project_code: schema.projects.project_code,
+      project_name: schema.projects.project_name,
+      role: schema.projectAllocation.role,
+      allocation_percentage: schema.projectAllocation.allocation_percentage,
+      start_date: schema.projectAllocation.start_date,
+      end_date: schema.projectAllocation.end_date,
+      is_billable: schema.projectAllocation.billability,
+      assigned_by: schema.projectAllocation.assigned_by,
+    })
+    .from(schema.projectAllocation)
+    .leftJoin(
+      schema.employees,
+      eq(schema.projectAllocation.emp_id, schema.employees.id),
+    )
+    .leftJoin(
+      schema.projects,
+      eq(schema.projectAllocation.project_id, schema.projects.id),
+    )
+    .where(eq(schema.projectAllocation.id, id))
+    .limit(1);
+
+  if (!allocation) {
+    return NextResponse.json(
+      { error: "Allocation not found" },
+      { status: 404 },
+    );
+  }
+
+  return NextResponse.json({ allocation });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
@@ -171,9 +243,20 @@ export async function GET(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
     const { searchParams } = new URL(req.url);
-    const emp_id = searchParams.get("emp_id");
+    const action = searchParams.get("action");
+    const id = searchParams.get("id");
+
+    // Handle single allocation retrieval
+    if (action === "get" && id) {
+      return handleGetAllocation(req, user, id);
+    }
+
+    // Handle list allocations
+    const emp_id =
+      searchParams.get("employee_id") || searchParams.get("emp_id");
     const project_id = searchParams.get("project_id");
     const active_only = searchParams.get("active_only") === "true";
+    const search = searchParams.get("search");
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
     const offset = (page - 1) * limit;
@@ -223,6 +306,20 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Search filter
+    if (search && search.trim()) {
+      const searchTerm = `%${search.toLowerCase()}%`;
+      whereConditions.push(
+        sql`(
+          LOWER(${schema.employees.full_name}) LIKE ${searchTerm} OR
+          LOWER(${schema.employees.employee_code}) LIKE ${searchTerm} OR
+          LOWER(${schema.projects.project_name}) LIKE ${searchTerm} OR
+          LOWER(${schema.projects.project_code}) LIKE ${searchTerm} OR
+          LOWER(${schema.projectAllocation.role}) LIKE ${searchTerm}
+        )`,
+      );
+    }
+
     const whereClause =
       whereConditions.length > 0 ? and(...whereConditions) : undefined;
 
@@ -230,6 +327,14 @@ export async function GET(req: NextRequest) {
     const [countResult] = await db
       .select({ count: sql<number>`count(*)` })
       .from(schema.projectAllocation)
+      .leftJoin(
+        schema.employees,
+        eq(schema.projectAllocation.emp_id, schema.employees.id),
+      )
+      .leftJoin(
+        schema.projects,
+        eq(schema.projectAllocation.project_id, schema.projects.id),
+      )
       .where(whereClause);
     const total = Number(countResult.count);
 
@@ -247,7 +352,7 @@ export async function GET(req: NextRequest) {
         allocation_percentage: schema.projectAllocation.allocation_percentage,
         start_date: schema.projectAllocation.start_date,
         end_date: schema.projectAllocation.end_date,
-        billability: schema.projectAllocation.billability,
+        is_billable: schema.projectAllocation.billability,
         assigned_by: schema.projectAllocation.assigned_by,
       })
       .from(schema.projectAllocation)

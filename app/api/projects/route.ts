@@ -263,6 +263,7 @@ async function handleListProjects(
 ) {
   const status = searchParams.get("status");
   const project_manager_id = searchParams.get("project_manager_id");
+  const search = searchParams.get("search");
   const { page, limit, offset } = getPaginationParams(new URL(req.url));
 
   const whereConditions: any[] = [];
@@ -277,11 +278,31 @@ async function handleListProjects(
     );
   }
 
+  if (search && search.trim()) {
+    const searchTerm = `%${search.toLowerCase()}%`;
+    whereConditions.push(
+      sql`(
+        LOWER(${schema.projects.project_name}) LIKE ${searchTerm} OR
+        LOWER(${schema.projects.project_code}) LIKE ${searchTerm} OR
+        LOWER(${schema.clients.client_name}) LIKE ${searchTerm}
+      )`,
+    );
+  }
+
   const whereClause =
     whereConditions.length > 0 ? and(...whereConditions) : undefined;
 
-  // Get total count
-  const total = await getCount(schema.projects, whereClause);
+  // Get total count with joins for search
+  const [countResult] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(schema.projects)
+    .leftJoin(schema.clients, eq(schema.projects.client_id, schema.clients.id))
+    .leftJoin(
+      schema.employees,
+      eq(schema.projects.project_manager_id, schema.employees.id),
+    )
+    .where(whereClause);
+  const total = Number(countResult.count);
 
   // Get projects with joins
   const projects = await db

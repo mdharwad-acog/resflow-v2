@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -19,10 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DataTable, Column } from "@/components/data-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { PaginationControls } from "@/components/pagination-controls";
+import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
-import { Plus, Pencil } from "lucide-react";
+import { Plus, Pencil, Search, FileText } from "lucide-react";
 import { LoadingPage } from "@/components/loading-spinner";
 
 interface Allocation {
@@ -68,6 +78,13 @@ function AllocationsListContent() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Search and pagination state
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(20);
+  const [total, setTotal] = useState(0);
+
   const [projectFilter, setProjectFilter] = useState<string | undefined>(
     undefined,
   );
@@ -78,11 +95,33 @@ function AllocationsListContent() {
 
   const isHR = user?.employee_role === "hr_executive";
 
+  // Fetch reference data only once
   useEffect(() => {
     fetchEmployees();
     fetchProjects();
+  }, []);
+
+  // Fetch allocations when filters, search or page changes
+  useEffect(() => {
     fetchAllocations();
-  }, [projectFilter, employeeFilter, activeOnlyFilter]);
+  }, [
+    projectFilter,
+    employeeFilter,
+    activeOnlyFilter,
+    searchQuery,
+    currentPage,
+  ]);
+
+  const handleSearch = () => {
+    setSearchQuery(searchInput);
+    setCurrentPage(1);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   const fetchEmployees = async () => {
     try {
@@ -118,12 +157,16 @@ function AllocationsListContent() {
 
   const fetchAllocations = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("auth_token");
       const params = new URLSearchParams();
 
       if (projectFilter) params.append("project_id", projectFilter);
       if (employeeFilter) params.append("employee_id", employeeFilter);
       if (activeOnlyFilter) params.append("active_only", activeOnlyFilter);
+      if (searchQuery) params.append("search", searchQuery);
+      params.append("page", currentPage.toString());
+      params.append("limit", pageSize.toString());
 
       const response = await fetch(`/api/allocations?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -135,6 +178,7 @@ function AllocationsListContent() {
 
       const data = await response.json();
       setAllocations(data.allocations || []);
+      setTotal(data.total || 0);
     } catch (error) {
       console.error("Error fetching allocations:", error);
       toast.error("Failed to load allocations");
@@ -142,61 +186,6 @@ function AllocationsListContent() {
       setLoading(false);
     }
   };
-
-  const columns: Column<Allocation>[] = [
-    {
-      key: "employee_code",
-      header: "Employee Code",
-      render: (a) => a.employee_code,
-    },
-    {
-      key: "employee_name",
-      header: "Employee Name",
-      render: (a) => a.employee_name,
-    },
-    {
-      key: "project_code",
-      header: "Project Code",
-      render: (a) => a.project_code,
-    },
-    {
-      key: "project_name",
-      header: "Project Name",
-      render: (a) => a.project_name,
-    },
-    { key: "role", header: "Role", render: (a) => a.role },
-    {
-      key: "allocation_percentage",
-      header: "Allocation %",
-      render: (a) => (
-        <Badge variant="secondary">{a.allocation_percentage}%</Badge>
-      ),
-    },
-    {
-      key: "billable",
-      header: "Billable",
-      render: (a) => (
-        <Badge variant={a.is_billable ? "default" : "outline"}>
-          {a.is_billable ? "Yes" : "No"}
-        </Badge>
-      ),
-    },
-    // 'Critical' column removed (no longer supported by DB)
-    {
-      key: "dates",
-      header: "Duration",
-      render: (a) => (
-        <div className="text-sm">
-          <div>{new Date(a.start_date).toLocaleDateString()}</div>
-          {a.end_date && (
-            <div className="text-muted-foreground">
-              to {new Date(a.end_date).toLocaleDateString()}
-            </div>
-          )}
-        </div>
-      ),
-    },
-  ];
 
   if (loading) return <LoadingPage />;
 
@@ -230,96 +219,184 @@ function AllocationsListContent() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Project</label>
-                <Select
-                  value={projectFilter}
-                  onValueChange={(v) =>
-                    setProjectFilter(v === "all" ? undefined : v)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All projects" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Projects</SelectItem>
-                    {projects.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        {p.project_code} - {p.project_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <label className="text-sm font-medium">Search</label>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Search by employee, project, or role..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                  />
+                  <Button onClick={handleSearch} size="icon">
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Employee</label>
-                <Select
-                  value={employeeFilter}
-                  onValueChange={(v) =>
-                    setEmployeeFilter(v === "all" ? undefined : v)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All employees" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Employees</SelectItem>
-                    {employees.map((e) => (
-                      <SelectItem key={e.id} value={e.id}>
-                        {e.employee_code} - {e.full_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Project</label>
+                  <Select
+                    value={projectFilter}
+                    onValueChange={(v) =>
+                      setProjectFilter(v === "all" ? undefined : v)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All projects" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Projects</SelectItem>
+                      {projects.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          {p.project_code} - {p.project_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Status</label>
-                <Select
-                  value={activeOnlyFilter}
-                  onValueChange={setActiveOnlyFilter}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All allocations" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="true">Active Only</SelectItem>
-                    <SelectItem value="false">All Allocations</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Employee</label>
+                  <Select
+                    value={employeeFilter}
+                    onValueChange={(v) =>
+                      setEmployeeFilter(v === "all" ? undefined : v)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All employees" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Employees</SelectItem>
+                      {employees.map((e) => (
+                        <SelectItem key={e.id} value={e.id}>
+                          {e.employee_code} - {e.full_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Status</label>
+                  <Select
+                    value={activeOnlyFilter}
+                    onValueChange={setActiveOnlyFilter}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All allocations" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="true">Active Only</SelectItem>
+                      <SelectItem value="false">All Allocations</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
-            <DataTable
-              columns={columns}
-              data={allocations}
-              searchKeys={[
-                "employee_name",
-                "project_name",
-                "employee_code",
-                "project_code",
-              ]}
-              searchPlaceholder="Search by employee or project..."
-              onRowClick={(a) => router.push(`/allocations/${a.id}`)}
-              actions={
-                isHR
-                  ? (a) => (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/allocations/${a.id}`);
-                        }}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                    )
-                  : undefined
-              }
-            />
+            {/* Allocations Table */}
+            {allocations.length === 0 ? (
+              <EmptyState
+                icon={<FileText className="h-10 w-10 text-muted-foreground" />}
+                title="No allocations found"
+                description="Try adjusting your search criteria or create a new allocation"
+              />
+            ) : (
+              <>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Employee Code</TableHead>
+                        <TableHead>Employee Name</TableHead>
+                        <TableHead>Project Code</TableHead>
+                        <TableHead>Project Name</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Allocation %</TableHead>
+                        <TableHead>Billable</TableHead>
+                        <TableHead>Duration</TableHead>
+                        {isHR && (
+                          <TableHead className="w-[50px]">Actions</TableHead>
+                        )}
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {allocations.map((allocation) => (
+                        <TableRow
+                          key={allocation.id}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            router.push(`/allocations/${allocation.id}`)
+                          }
+                        >
+                          <TableCell>{allocation.employee_code}</TableCell>
+                          <TableCell>{allocation.employee_name}</TableCell>
+                          <TableCell>{allocation.project_code}</TableCell>
+                          <TableCell>{allocation.project_name}</TableCell>
+                          <TableCell>{allocation.role}</TableCell>
+                          <TableCell>
+                            <Badge variant="secondary">
+                              {allocation.allocation_percentage}%
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={
+                                allocation.is_billable ? "default" : "outline"
+                              }
+                            >
+                              {allocation.is_billable ? "Yes" : "No"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
+                              <div>
+                                {new Date(
+                                  allocation.start_date,
+                                ).toLocaleDateString()}
+                              </div>
+                              {allocation.end_date && (
+                                <div className="text-muted-foreground text-xs">
+                                  to{" "}
+                                  {new Date(
+                                    allocation.end_date,
+                                  ).toLocaleDateString()}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                          {isHR && (
+                            <TableCell>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(`/allocations/${allocation.id}`);
+                                }}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+                <PaginationControls
+                  currentPage={currentPage}
+                  pageSize={pageSize}
+                  total={total}
+                  onPageChange={setCurrentPage}
+                  itemName="allocations"
+                />
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

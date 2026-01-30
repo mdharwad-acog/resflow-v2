@@ -93,21 +93,51 @@ async function handleList(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const department_id = searchParams.get("department_id");
+  const department_name = searchParams.get("department_name");
+  const search = searchParams.get("search");
   const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "10");
+  const limit = parseInt(searchParams.get("limit") || "20");
   const offset = (page - 1) * limit;
 
   // Build where clause
-  const whereClause = department_id
-    ? eq(schema.skills.department_id, department_id)
-    : undefined;
+  const whereConditions: any[] = [];
+
+  if (department_id) {
+    whereConditions.push(eq(schema.skills.department_id, department_id));
+  }
+
+  if (department_name) {
+    whereConditions.push(eq(schema.departments.name, department_name));
+  }
+
+  if (search && search.trim()) {
+    const searchTerm = `%${search.toLowerCase()}%`;
+    whereConditions.push(
+      sql`(
+        LOWER(${schema.skills.skill_name}) LIKE ${searchTerm} OR
+        LOWER(${schema.departments.name}) LIKE ${searchTerm}
+      )`,
+    );
+  }
+
+  const whereClause =
+    whereConditions.length > 0 ? and(...whereConditions) : undefined;
 
   // Get total count
-  const total = await getCount(schema.skills, whereClause);
+  const [countResult] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(schema.skills)
+    .leftJoin(
+      schema.departments,
+      eq(schema.skills.department_id, schema.departments.id),
+    )
+    .where(whereClause);
+  const total = Number(countResult.count);
 
   // Get skills with department details (using JOIN)
-  const baseQuery = db
+  const skills = await db
     .select({
+      id: schema.skills.skill_id,
       skill_id: schema.skills.skill_id,
       skill_name: schema.skills.skill_name,
       department_id: schema.skills.department_id,
@@ -119,12 +149,10 @@ async function handleList(req: NextRequest) {
       schema.departments,
       eq(schema.skills.department_id, schema.departments.id),
     )
+    .where(whereClause)
+    .orderBy(schema.skills.skill_name)
     .limit(limit)
     .offset(offset);
-
-  const skills = whereClause
-    ? await baseQuery.where(whereClause)
-    : await baseQuery;
 
   return successResponse({ skills, total, page, limit });
 }

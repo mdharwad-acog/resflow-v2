@@ -7,7 +7,7 @@ import {
   validateRequiredFields,
   successResponse,
 } from "@/lib/api-helpers";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 // GET /api/clients
 export async function GET(req: NextRequest) {
@@ -39,14 +39,24 @@ async function handleListClients(req: NextRequest) {
       return ErrorResponses.accessDenied();
     }
 
-    // Fetch all clients
+    // Fetch all clients with project count
     const clients = await db
       .select({
         id: schema.clients.id,
         client_name: schema.clients.client_name,
         created_at: schema.clients.created_at,
+        project_count: sql<number>`COUNT(DISTINCT ${schema.projects.id})::int`,
       })
       .from(schema.clients)
+      .leftJoin(
+        schema.projects,
+        eq(schema.clients.id, schema.projects.client_id),
+      )
+      .groupBy(
+        schema.clients.id,
+        schema.clients.client_name,
+        schema.clients.created_at,
+      )
       .orderBy(schema.clients.client_name);
 
     return successResponse({ clients });

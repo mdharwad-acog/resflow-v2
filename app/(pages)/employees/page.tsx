@@ -19,11 +19,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DataTable, Column } from "@/components/data-table";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { ExitEmployeeModal } from "@/components/forms/exit-employee-modal";
 import { Badge } from "@/components/ui/badge";
+import { PaginationControls } from "@/components/pagination-controls";
 import { toast } from "sonner";
-import { Plus, Pencil, LogOut } from "lucide-react";
+import { Plus, Pencil, LogOut, Search } from "lucide-react";
 import { LoadingPage } from "@/components/loading-spinner";
 
 interface Employee {
@@ -46,6 +55,12 @@ interface Department {
   name: string;
 }
 
+interface Column<T> {
+  key: string;
+  header: string;
+  render?: (item: T) => React.ReactNode;
+}
+
 export default function EmployeesListPage() {
   return (
     <ProtectedRoute>
@@ -60,6 +75,13 @@ function EmployeesListContent() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>(""); // Separate input state
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(20);
+  const [total, setTotal] = useState(0);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>("ACTIVE");
@@ -76,10 +98,19 @@ function EmployeesListContent() {
 
   const isHR = user?.employee_role === "hr_executive";
 
+  // Fetch when filters or pagination changes
+  useEffect(() => {
+    setCurrentPage(1); // Reset to page 1 when filters change
+  }, [statusFilter, departmentFilter, roleFilter, searchQuery]);
+
   useEffect(() => {
     fetchDepartments();
+  }, []);
+
+  // Fetch employees whenever page, filters, or search changes
+  useEffect(() => {
     fetchEmployees();
-  }, [statusFilter, departmentFilter, roleFilter]);
+  }, [currentPage, statusFilter, departmentFilter, roleFilter, searchQuery]);
 
   const fetchDepartments = async () => {
     try {
@@ -99,12 +130,16 @@ function EmployeesListContent() {
 
   const fetchEmployees = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("auth_token");
       const params = new URLSearchParams();
 
       if (statusFilter) params.append("status", statusFilter);
       if (departmentFilter) params.append("department_id", departmentFilter);
       if (roleFilter) params.append("role", roleFilter);
+      if (searchQuery) params.append("search", searchQuery);
+      params.append("page", currentPage.toString());
+      params.append("limit", pageSize.toString());
 
       const response = await fetch(`/api/employees?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -116,11 +151,35 @@ function EmployeesListContent() {
 
       const result = await response.json();
       setEmployees(result.employees || []);
+      setTotal(result.total || 0);
     } catch (error) {
       console.error("Error fetching employees:", error);
       toast.error("Failed to load employees");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFilterChange = (
+    filter: "status" | "department" | "role",
+    value: string | undefined,
+  ) => {
+    if (filter === "status") {
+      setStatusFilter(value || "ACTIVE");
+    } else if (filter === "department") {
+      setDepartmentFilter(value);
+    } else if (filter === "role") {
+      setRoleFilter(value);
+    }
+  };
+
+  const handleSearch = () => {
+    setSearchQuery(searchInput);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch();
     }
   };
 
@@ -159,7 +218,7 @@ function EmployeesListContent() {
       {
         key: "employee_role",
         header: "Role",
-        render: (emp) => (
+        render: (emp: Employee) => (
           <Badge variant="outline">
             {emp.employee_role.replace("_", " ").toUpperCase()}
           </Badge>
@@ -172,7 +231,7 @@ function EmployeesListContent() {
       {
         key: "status",
         header: "Status",
-        render: (emp) => (
+        render: (emp: Employee) => (
           <Badge variant={emp.status === "ACTIVE" ? "default" : "secondary"}>
             {emp.status}
           </Badge>
@@ -201,7 +260,7 @@ function EmployeesListContent() {
         {
           key: "joined_on",
           header: "Joined On",
-          render: (emp) =>
+          render: (emp: Employee) =>
             emp.joined_on ? new Date(emp.joined_on).toLocaleDateString() : "-",
         },
       ];
@@ -245,10 +304,33 @@ function EmployeesListContent() {
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium">Search</label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Search by name, email, code..."
+                      value={searchInput}
+                      onChange={(e) => setSearchInput(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      className="pl-10"
+                    />
+                  </div>
+                  <Button onClick={handleSearch} variant="default">
+                    Search
+                  </Button>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Status</label>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <Select
+                  value={statusFilter}
+                  onValueChange={(value) => handleFilterChange("status", value)}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="All statuses" />
                   </SelectTrigger>
@@ -262,9 +344,12 @@ function EmployeesListContent() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Department</label>
                 <Select
-                  value={departmentFilter}
+                  value={departmentFilter || "all"}
                   onValueChange={(value) =>
-                    setDepartmentFilter(value === "all" ? undefined : value)
+                    handleFilterChange(
+                      "department",
+                      value === "all" ? undefined : value,
+                    )
                   }
                 >
                   <SelectTrigger>
@@ -284,9 +369,12 @@ function EmployeesListContent() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Role</label>
                 <Select
-                  value={roleFilter}
+                  value={roleFilter || "all"}
                   onValueChange={(value) =>
-                    setRoleFilter(value === "all" ? undefined : value)
+                    handleFilterChange(
+                      "role",
+                      value === "all" ? undefined : value,
+                    )
                   }
                 >
                   <SelectTrigger>
@@ -294,56 +382,105 @@ function EmployeesListContent() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Roles</SelectItem>
-                    <SelectItem value="employee">Employee</SelectItem>
-                    <SelectItem value="project_manager">
-                      Project Manager
-                    </SelectItem>
-                    <SelectItem value="hr_executive">HR Executive</SelectItem>
+                    <SelectItem value="EMP">Employee</SelectItem>
+                    <SelectItem value="PM">Project Manager</SelectItem>
+                    <SelectItem value="HR">HR Executive</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            {/* Data Table */}
-            <DataTable
-              data={employees}
-              columns={getColumns()}
-              searchPlaceholder="Search by name, email, or code..."
-              searchKeys={["full_name", "email", "employee_code"]}
-              onRowClick={handleRowClick}
-              actions={
-                isHR
-                  ? (emp) => (
-                      <div className="flex gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEdit(emp);
-                          }}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        {emp.status === "ACTIVE" && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleExitClick(emp);
-                            }}
-                          >
-                            <LogOut className="h-4 w-4" />
-                          </Button>
+            {/* Data Table with Server-Side Pagination */}
+            {loading ? (
+              <div className="text-center py-8">
+                <LoadingPage />
+              </div>
+            ) : (
+              <>
+                <div className="border rounded-md overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        {getColumns().map((column) => (
+                          <TableHead key={column.key}>
+                            {column.header}
+                          </TableHead>
+                        ))}
+                        {isHR && (
+                          <TableHead className="text-right">Actions</TableHead>
                         )}
-                      </div>
-                    )
-                  : undefined
-              }
-              emptyMessage="No employees found"
-              pageSize={20}
-            />
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {employees.length === 0 ? (
+                        <TableRow>
+                          <TableCell
+                            colSpan={getColumns().length + (isHR ? 1 : 0)}
+                            className="text-center py-8 text-muted-foreground"
+                          >
+                            No employees found
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        employees.map((emp) => (
+                          <TableRow
+                            key={emp.id}
+                            onClick={() => handleRowClick(emp)}
+                            className="cursor-pointer"
+                          >
+                            {getColumns().map((column) => (
+                              <TableCell key={column.key}>
+                                {column.render
+                                  ? column.render(emp)
+                                  : (emp[column.key as keyof Employee] ??
+                                    "N/A")}
+                              </TableCell>
+                            ))}
+                            {isHR && (
+                              <TableCell className="text-right">
+                                <div className="flex gap-2 justify-end">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleEdit(emp);
+                                    }}
+                                  >
+                                    <Pencil className="h-4 w-4" />
+                                  </Button>
+                                  {emp.status === "ACTIVE" && (
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleExitClick(emp);
+                                      }}
+                                    >
+                                      <LogOut className="h-4 w-4" />
+                                    </Button>
+                                  )}
+                                </div>
+                              </TableCell>
+                            )}
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Pagination Controls */}
+                <PaginationControls
+                  currentPage={currentPage}
+                  pageSize={pageSize}
+                  total={total}
+                  onPageChange={setCurrentPage}
+                  itemName="employees"
+                />
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
