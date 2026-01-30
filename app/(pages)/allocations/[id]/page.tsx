@@ -68,7 +68,7 @@ interface FormErrors {
 
 export default function AllocationDetailPage() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute requiredRoles={["hr_executive"]}>
       <AllocationDetailContent />
     </ProtectedRoute>
   );

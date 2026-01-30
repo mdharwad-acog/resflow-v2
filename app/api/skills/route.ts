@@ -157,6 +157,89 @@ async function handleList(req: NextRequest) {
   return successResponse({ skills, total, page, limit });
 }
 
+// PUT /api/skills/update - Update existing skill
+async function handleUpdate(req: NextRequest) {
+  const user = await getCurrentUser(req);
+
+  if (!checkRole(user, ["hr_executive"])) {
+    return ErrorResponses.accessDenied();
+  }
+
+  const body = await req.json();
+  const { skill_id, skill_name, department_id } = body;
+
+  // Validate required fields
+  const missingFields = validateRequiredFields(body, ["skill_id"]);
+  if (missingFields) {
+    return ErrorResponses.badRequest(missingFields);
+  }
+
+  // Check if skill exists
+  const [existingSkill] = await db
+    .select()
+    .from(schema.skills)
+    .where(eq(schema.skills.skill_id, skill_id));
+
+  if (!existingSkill) {
+    return ErrorResponses.notFound("Skill");
+  }
+
+  // If skill_name is being updated, check uniqueness
+  if (skill_name && skill_name !== existingSkill.skill_name) {
+    const [duplicate] = await db
+      .select()
+      .from(schema.skills)
+      .where(
+        and(
+          eq(schema.skills.skill_name, skill_name),
+          sql`${schema.skills.skill_id} != ${skill_id}`,
+        ),
+      );
+
+    if (duplicate) {
+      return ErrorResponses.badRequest("skill_name already exists");
+    }
+  }
+
+  // If department_id is being updated, verify it exists
+  if (department_id && department_id !== existingSkill.department_id) {
+    const [department] = await db
+      .select()
+      .from(schema.departments)
+      .where(eq(schema.departments.id, department_id));
+
+    if (!department) {
+      return ErrorResponses.notFound("Department");
+    }
+  }
+
+  // Update skill
+  const updateData: any = {};
+  if (skill_name) updateData.skill_name = skill_name;
+  if (department_id) updateData.department_id = department_id;
+
+  const [updatedSkill] = await db
+    .update(schema.skills)
+    .set(updateData)
+    .where(eq(schema.skills.skill_id, skill_id))
+    .returning();
+
+  // Create audit log
+  await createAuditLog({
+    entity_type: "SKILL",
+    entity_id: skill_id,
+    operation: "UPDATE",
+    changed_by: user.id,
+    changed_fields: updateData,
+  });
+
+  return successResponse({
+    skill_id: updatedSkill.skill_id,
+    skill_name: updatedSkill.skill_name,
+    department_id: updatedSkill.department_id,
+  });
+}
+
 // DELETE /api/skills/delete - Delete skill
 async function handleDelete(req: NextRequest) {
   const user = await getCurrentUser(req);
@@ -225,6 +308,15 @@ export async function GET(req: NextRequest) {
     return await handleList(req);
   } catch (error) {
     console.error("Error fetching skills:", error);
+    return ErrorResponses.internalError();
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    return await handleUpdate(req);
+  } catch (error) {
+    console.error("Error updating skill:", error);
     return ErrorResponses.internalError();
   }
 }

@@ -56,6 +56,7 @@ interface ProjectDetails {
 
 interface Allocation {
   id: string;
+  emp_id: string;
   employee_code: string;
   employee_name: string;
   role: string;
@@ -238,7 +239,10 @@ function ProjectDetailContent() {
                         Started On
                       </p>
                       <p className="font-medium">
-                        {new Date(project.started_on).toLocaleDateString()}
+                        {project.started_on &&
+                        new Date(project.started_on).getFullYear() > 1970
+                          ? new Date(project.started_on).toLocaleDateString()
+                          : "N/A"}
                       </p>
                     </div>
                   </div>
@@ -395,7 +399,7 @@ function ProjectDetailContent() {
                             key={allocation.id}
                             className="cursor-pointer"
                             onClick={() =>
-                              router.push(`/allocations/${allocation.id}`)
+                              router.push(`/employees/${allocation.emp_id}`)
                             }
                           >
                             <TableCell>

@@ -125,7 +125,7 @@ export default function TasksPage() {
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6 pt-8">
+    <div className="flex-1 space-y-6 p-6 md:p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Tasks</h1>
         {(user?.employee_role === "project_manager" ||

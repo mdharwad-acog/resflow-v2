@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db, schema } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { ErrorResponses, successResponse } from "@/lib/api-helpers";
-import { eq, and, sql, gte, lte, ne } from "drizzle-orm";
+import { eq, and, sql, gte, lte, ne, inArray } from "drizzle-orm";
 
 /**
  * GET /api/dashboard/metrics
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
         );
       completedTasks = completedTasksResult[0]?.count || 0;
 
-      // Active projects this employee is allocated to
+      // Active projects this employee is allocated to (current allocations only)
       const activeProjectsResult = await db
         .select({
           count: sql<number>`cast(count(DISTINCT ${schema.projectAllocation.project_id}) as integer)`,
@@ -74,6 +74,8 @@ export async function GET(req: NextRequest) {
             eq(schema.projectAllocation.emp_id, user.id),
             ne(schema.projects.status, "COMPLETED"),
             ne(schema.projects.status, "CANCELLED"),
+            // Only count current allocations (no end_date or end_date in future)
+            sql`(${schema.projectAllocation.end_date} IS NULL OR ${schema.projectAllocation.end_date} >= CURRENT_DATE)`,
           ),
         );
       activeProjects = activeProjectsResult[0]?.count || 0;
@@ -166,9 +168,7 @@ export async function GET(req: NextRequest) {
         const teamMembers = await db
           .select({ emp_id: schema.projectAllocation.emp_id })
           .from(schema.projectAllocation)
-          .where(
-            sql`${schema.projectAllocation.project_id} = ANY(${projectIds})`,
-          );
+          .where(inArray(schema.projectAllocation.project_id, projectIds));
         teamMemberIds = [...new Set(teamMembers.map((m) => m.emp_id))];
       }
 
@@ -179,7 +179,7 @@ export async function GET(req: NextRequest) {
           .from(schema.tasks)
           .where(
             and(
-              sql`${schema.tasks.owner_id} = ANY(${teamMemberIds})`,
+              inArray(schema.tasks.owner_id, teamMemberIds),
               eq(schema.tasks.status, "DUE"),
             ),
           );
@@ -191,7 +191,7 @@ export async function GET(req: NextRequest) {
           .from(schema.tasks)
           .where(
             and(
-              sql`${schema.tasks.owner_id} = ANY(${teamMemberIds})`,
+              inArray(schema.tasks.owner_id, teamMemberIds),
               eq(schema.tasks.status, "COMPLETED"),
             ),
           );
@@ -218,7 +218,7 @@ export async function GET(req: NextRequest) {
           .from(schema.reports)
           .where(
             and(
-              sql`${schema.reports.emp_id} = ANY(${teamMemberIds})`,
+              inArray(schema.reports.emp_id, teamMemberIds),
               eq(schema.reports.report_type, "WEEKLY"),
               gte(
                 schema.reports.week_start_date,
@@ -262,7 +262,7 @@ export async function GET(req: NextRequest) {
           )
           .where(
             and(
-              sql`${schema.tasks.owner_id} = ANY(${teamMemberIds})`,
+              inArray(schema.tasks.owner_id, teamMemberIds),
               lte(
                 schema.tasks.due_on,
                 sevenDaysFromNow.toISOString().split("T")[0],

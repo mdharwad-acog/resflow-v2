@@ -44,6 +44,17 @@ export function AppSidebar() {
   const filteredReports = filterByRole(navConfig.reports);
   const filteredSystem = filterByRole(navConfig.system);
 
+  // Combine all items into a single flat list
+  const allItems = [
+    ...filteredWorkTracking.filter((item) => item.title === "Tasks"),
+    ...filteredMain, // Dashboard
+    ...filteredWorkTracking.filter((item) => item.title !== "Tasks"),
+    ...filteredResources,
+    ...filteredGovernance,
+    ...filteredReports,
+    ...filteredSystem,
+  ];
+
   // Show loading state
   if (isLoading) {
     return (
@@ -67,164 +78,40 @@ export function AppSidebar() {
         <h2 className="text-xl font-serif font-bold text-primary">ResFlow</h2>
       </SidebarHeader>
 
-      <SidebarContent>
-        {/* Main Dashboard */}
-        {filteredMain.length > 0 && (
-          <SidebarGroup>
-            <SidebarMenu>
-              {filteredMain.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.url}
-                    tooltip={item.title}
-                  >
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-        )}
-
-        {/* Work Tracking */}
-        {filteredWorkTracking.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Work Tracking</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {filteredWorkTracking.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname.startsWith(item.url)}
-                      tooltip={item.title}
-                    >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {/* Resources */}
-        {filteredResources.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Resources</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {filteredResources.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname.startsWith(item.url)}
-                      tooltip={item.title}
-                    >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {/* Governance - Only show if user has access to at least one item */}
-        {filteredGovernance.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Governance</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {filteredGovernance.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname.startsWith(item.url)}
-                      tooltip={item.title}
-                    >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {/* Analytics */}
-        {filteredReports.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Analytics</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {filteredReports.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname.startsWith(item.url)}
-                      tooltip={item.title}
-                    >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {/* System */}
-        {filteredSystem.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>System</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {filteredSystem.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname.startsWith(item.url)}
-                      tooltip={item.title}
-                    >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+      <SidebarContent className="px-2">
+        {/* Single flat menu with improved spacing */}
+        <SidebarGroup>
+          <SidebarMenu className="space-y-1">
+            {allItems.map((item) => (
+              <SidebarMenuItem key={item.url}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={
+                    pathname === item.url || pathname.startsWith(item.url + "/")
+                  }
+                  tooltip={item.title}
+                  className="h-10 px-3"
+                >
+                  <Link href={item.url}>
+                    <item.icon className="h-4 w-4" />
+                    <span className="text-sm font-medium">{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t p-4">
+      <SidebarFooter className="border-t p-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}
-              className="text-destructive hover:text-destructive"
+              className="h-10 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
             >
-              <LogOut />
-              <span>Logout</span>
+              <LogOut className="h-4 w-4" />
+              <span className="text-sm font-medium">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

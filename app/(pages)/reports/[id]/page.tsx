@@ -63,7 +63,12 @@ export default function ReportDetailPage() {
 
   async function fetchUserRole() {
     try {
-      const response = await fetch("/api/auth/me");
+      const token = localStorage.getItem("auth_token");
+      const response = await fetch("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setUserRole(data.user.role);
@@ -76,7 +81,12 @@ export default function ReportDetailPage() {
   async function fetchReportDetail() {
     try {
       setLoading(true);
-      const response = await fetch(`/api/reports/${reportId}`);
+      const token = localStorage.getItem("auth_token");
+      const response = await fetch(`/api/reports/${reportId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         if (response.status === 404) {

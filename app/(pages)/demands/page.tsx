@@ -90,7 +90,14 @@ function DemandsListContent() {
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-      const response = await fetch("/api/projects", {
+      const params = new URLSearchParams();
+
+      // If PM, only fetch their own projects
+      if (isPM && user?.id) {
+        params.append("project_manager_id", user.id);
+      }
+
+      const response = await fetch(`/api/projects?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -218,7 +225,7 @@ function DemandsListContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-6 md:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-semibold">Resource Demands</h1>
@@ -238,7 +245,7 @@ function DemandsListContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 md:px-8 py-8">
         <Card>
           <CardHeader>
             <CardTitle>Demands List</CardTitle>

@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { StatusBadge } from "@/components/status-badge";
-import { LogWorkWidget } from "@/components/log-work-widget";
 import {
   Briefcase,
   CheckSquare,
@@ -23,6 +22,7 @@ import {
   FolderPlus,
   ListChecks,
   Settings,
+  Plus,
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -166,7 +166,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-6 p-6 md:p-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">
@@ -186,8 +186,8 @@ export default function DashboardPage() {
 
       {/* Overview Section */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Overview</h3>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <h3 className="text-lg font-semibold mb-6">Overview</h3>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {userRole === "employee" && (
             <>
               <Card className="border-t-4 border-t-red-500">
@@ -238,18 +238,18 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-t-4 border-t-yellow-500">
+              <Card className="border-t-4 border-t-purple-500">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Missing Reports
+                    Weekly Hours
                   </CardTitle>
-                  <div className="p-2 bg-yellow-50 dark:bg-yellow-950 rounded">
-                    <AlertCircle className="h-5 w-5 text-yellow-500" />
+                  <div className="p-2 bg-purple-50 dark:bg-purple-950 rounded">
+                    <Clock className="h-5 w-5 text-purple-500" />
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">
-                    {metrics.missingReports || 0}
+                    {metrics.weeklyHours || 0}
                   </div>
                 </CardContent>
               </Card>
@@ -270,6 +270,22 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="text-3xl font-bold">
                     {metrics.pendingTasks || 0}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-t-4 border-t-green-500">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Completed Tasks
+                  </CardTitle>
+                  <div className="p-2 bg-green-50 dark:bg-green-950 rounded">
+                    <CheckSquare className="h-5 w-5 text-green-500" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">
+                    {metrics.completedTasks || 0}
                   </div>
                 </CardContent>
               </Card>
@@ -302,22 +318,6 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="text-3xl font-bold">
                     {metrics.weeklyHours || 0}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-t-4 border-t-yellow-500">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Missing Reports
-                  </CardTitle>
-                  <div className="p-2 bg-yellow-50 dark:bg-yellow-950 rounded">
-                    <AlertCircle className="h-5 w-5 text-yellow-500" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">
-                    {metrics.missingReports || 0}
                   </div>
                 </CardContent>
               </Card>
@@ -363,8 +363,36 @@ export default function DashboardPage() {
         <div className="grid gap-6 md:grid-cols-2">
           {/* Left Column - Time Tracking & Weekly Report */}
           <div className="space-y-6">
-            {/* Daily Work Log */}
-            <LogWorkWidget currentDate={currentTime} />
+            {/* Daily Work Log - Navigation Card */}
+            <Card
+              className="hover:shadow-md transition-shadow cursor-pointer border-primary/20"
+              onClick={() => router.push("/logs/new")}
+            >
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                <div className="flex items-center">
+                  <FileText className="h-5 w-5 mr-2" />
+                  <CardTitle className="text-base font-semibold">
+                    Log Daily Work
+                  </CardTitle>
+                </div>
+                <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Record your daily work hours across multiple projects
+                </p>
+                <Button
+                  className="w-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push("/logs/new");
+                  }}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Work Log
+                </Button>
+              </CardContent>
+            </Card>
 
             {/* Submit Weekly Report */}
             <Card>
@@ -379,7 +407,11 @@ export default function DashboardPage() {
                   Submit a consolidated report of your work across all projects
                   this week
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => router.push("/reports/new")}
+                >
                   <ArrowUpRight className="h-4 w-4 mr-2" />
                   Submit Report
                 </Button>
@@ -455,8 +487,36 @@ export default function DashboardPage() {
         <div className="grid gap-6 md:grid-cols-[1fr_350px]">
           {/* Left Column - Time Tracking, Weekly Report & Tasks */}
           <div className="space-y-6">
-            {/* Daily Work Log */}
-            <LogWorkWidget currentDate={currentTime} />
+            {/* Daily Work Log - Navigation Card */}
+            <Card
+              className="hover:shadow-md transition-shadow cursor-pointer border-primary/20"
+              onClick={() => router.push("/logs/new")}
+            >
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                <div className="flex items-center">
+                  <FileText className="h-5 w-5 mr-2" />
+                  <CardTitle className="text-base font-semibold">
+                    Log Daily Work
+                  </CardTitle>
+                </div>
+                <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Record your daily work hours across multiple projects
+                </p>
+                <Button
+                  className="w-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push("/logs/new");
+                  }}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Work Log
+                </Button>
+              </CardContent>
+            </Card>
 
             {/* Submit Weekly Report */}
             <Card>
@@ -471,7 +531,11 @@ export default function DashboardPage() {
                   Submit a consolidated report of your work across all projects
                   this week
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => router.push("/reports/new")}
+                >
                   <ArrowUpRight className="h-4 w-4 mr-2" />
                   Submit Report
                 </Button>
@@ -545,54 +609,25 @@ export default function DashboardPage() {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  <Button
-                    variant="outline"
-                    className="w-full h-auto flex items-start justify-start p-4 gap-3"
-                    asChild
-                  >
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="outline" size="sm" asChild>
                     <Link href="/logs/new">
-                      <Clock className="h-5 w-5 mt-0.5" />
-                      <div className="text-left">
-                        <div className="text-sm font-medium">Log Work</div>
-                        <div className="text-xs text-muted-foreground">
-                          Track daily hours
-                        </div>
-                      </div>
+                      <Clock className="h-4 w-4 mr-2" />
+                      Log Work
                     </Link>
                   </Button>
 
-                  <Button
-                    variant="outline"
-                    className="w-full h-auto flex items-start justify-start p-4 gap-3"
-                    asChild
-                  >
+                  <Button variant="outline" size="sm" asChild>
                     <Link href="/reports/new">
-                      <FileText className="h-5 w-5 mt-0.5" />
-                      <div className="text-left">
-                        <div className="text-sm font-medium">Submit Report</div>
-                        <div className="text-xs text-muted-foreground">
-                          Weekly summary
-                        </div>
-                      </div>
+                      <FileText className="h-4 w-4 mr-2" />
+                      Submit Report
                     </Link>
                   </Button>
 
-                  <Button
-                    variant="outline"
-                    className="w-full h-auto flex items-start justify-start p-4 gap-3"
-                    asChild
-                  >
+                  <Button variant="outline" size="sm" asChild>
                     <Link href="/demands/new">
-                      <Users className="h-5 w-5 mt-0.5" />
-                      <div className="text-left">
-                        <div className="text-sm font-medium">
-                          Request Resource
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Create resource demand
-                        </div>
-                      </div>
+                      <Users className="h-4 w-4 mr-2" />
+                      Request Resource
                     </Link>
                   </Button>
                 </div>
@@ -607,8 +642,36 @@ export default function DashboardPage() {
         <div className="grid gap-6 md:grid-cols-[1fr_400px]">
           {/* Left Column - Date/Report & Tasks */}
           <div className="space-y-6">
-            {/* Daily Work Log */}
-            <LogWorkWidget currentDate={currentTime} />
+            {/* Daily Work Log - Navigation Card */}
+            <Card
+              className="hover:shadow-md transition-shadow cursor-pointer border-primary/20"
+              onClick={() => router.push("/logs/new")}
+            >
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                <div className="flex items-center">
+                  <FileText className="h-5 w-5 mr-2" />
+                  <CardTitle className="text-base font-semibold">
+                    Log Daily Work
+                  </CardTitle>
+                </div>
+                <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Record your daily work hours across multiple projects
+                </p>
+                <Button
+                  className="w-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push("/logs/new");
+                  }}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Work Log
+                </Button>
+              </CardContent>
+            </Card>
 
             {/* Submit Weekly Report */}
             <Card>
@@ -623,7 +686,11 @@ export default function DashboardPage() {
                   Submit a consolidated report of your work across all projects
                   this week
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => router.push("/reports/new")}
+                >
                   <ArrowUpRight className="h-4 w-4 mr-2" />
                   Submit Report
                 </Button>

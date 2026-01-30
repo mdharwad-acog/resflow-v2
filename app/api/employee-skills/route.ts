@@ -17,6 +17,22 @@
 // Return: { employee_skills: [{ skill_id, skill_name, emp_id, employee_code, employee_name, proficiency_level, approved_by, approved_by_name, approved_at, status }], total, page, limit }
 // Error 403 if access denied
 
+// PUT /api/employee-skills
+// Allowed Roles: hr_executive
+// Accept: { action: "approve" | "reject", id: employee_skill_id }
+// Validation:
+//   - Only hr_executive can approve/reject
+//   - Check if skill request exists
+//   - Check if already processed (approved_by/approved_at not null)
+// If action = "approve":
+//   - UPDATE employee_skills SET approved_by = current_user_id, approved_at = NOW() WHERE id = ?
+//   - INSERT audit log with operation='UPDATE'
+// If action = "reject":
+//   - DELETE FROM employee_skills WHERE id = ?
+//   - INSERT audit log with operation='DELETE'
+// Return: { message: "Skill request [approved|rejected] successfully" }
+// Error 403 if not HR, 404 if not found, 400 if already processed
+
 // DELETE /api/employee-skills/delete
 // Allowed Roles: employee, project_manager, hr_executive
 // Accept: { emp_id, skill_id }
@@ -184,6 +200,100 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error("Error listing employee skills:", error);
+    return ErrorResponses.internalError();
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const user = await getCurrentUser(req);
+    const body = await req.json();
+    const { action, id } = body;
+
+    // Validate required fields
+    const missingFields = validateRequiredFields(body, ["action", "id"]);
+    if (missingFields) {
+      return ErrorResponses.badRequest(missingFields);
+    }
+
+    // Only HR executives can approve/reject skills
+    if (!checkRole(user, ["hr_executive"])) {
+      return ErrorResponses.accessDenied();
+    }
+
+    // Validate action
+    if (action !== "approve" && action !== "reject") {
+      return ErrorResponses.badRequest(
+        "Invalid action. Must be 'approve' or 'reject'",
+      );
+    }
+
+    // Get employee skill
+    const [employeeSkill] = await db
+      .select()
+      .from(schema.employeeSkills)
+      .where(eq(schema.employeeSkills.id, id));
+
+    if (!employeeSkill) {
+      return ErrorResponses.notFound("Employee skill request");
+    }
+
+    // Check if already processed
+    if (employeeSkill.approved_by || employeeSkill.approved_at) {
+      return ErrorResponses.badRequest("Skill request already processed");
+    }
+
+    if (action === "approve") {
+      // Approve the skill
+      const now = new Date().toISOString();
+      await db
+        .update(schema.employeeSkills)
+        .set({
+          approved_by: user.id,
+          approved_at: now,
+        })
+        .where(eq(schema.employeeSkills.id, id));
+
+      // Create audit log
+      await createAuditLog({
+        entity_type: "EMPLOYEE_SKILL",
+        entity_id: id,
+        operation: "UPDATE",
+        changed_by: user.id,
+        changed_fields: {
+          approved_by: user.id,
+          approved_at: now,
+        },
+      });
+
+      return successResponse({
+        message: "Skill request approved successfully",
+      });
+    } else {
+      // Reject means delete the pending request
+      await db
+        .delete(schema.employeeSkills)
+        .where(eq(schema.employeeSkills.id, id));
+
+      // Create audit log
+      await createAuditLog({
+        entity_type: "EMPLOYEE_SKILL",
+        entity_id: id,
+        operation: "DELETE",
+        changed_by: user.id,
+        changed_fields: {
+          action: "rejected",
+          emp_id: employeeSkill.emp_id,
+          skill_id: employeeSkill.skill_id,
+        },
+      });
+
+      return successResponse({
+        message: "Skill request rejected successfully",
+      });
+    }
+  } catch (error) {
+    console.error("Error processing skill request:", error);
     return ErrorResponses.internalError();
   }
 }

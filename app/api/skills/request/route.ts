@@ -25,24 +25,26 @@ export async function POST(req: NextRequest) {
     const user = await getCurrentUser(req);
 
     const body = await req.json();
-    const { emp_id, skill_id, proficiency_level } = body;
+    const { skill_id, proficiency_level } = body;
 
-    // Validate required fields
-    const missingFields = validateRequiredFields(body, [
-      "emp_id",
-      "skill_id",
-      "proficiency_level",
-    ]);
-    if (missingFields) {
-      return ErrorResponses.badRequest(missingFields);
+    // For employees and PMs, use their own ID; HR can specify emp_id
+    let emp_id = body.emp_id;
+
+    if (checkRole(user, ["employee", "project_manager"])) {
+      // Employees and PMs can only request for themselves
+      emp_id = user.id;
+    } else if (checkRole(user, ["hr_executive"]) && !emp_id) {
+      // HR must specify emp_id
+      return ErrorResponses.badRequest("emp_id is required for HR executives");
     }
 
-    // Validation: employee/project_manager can only request for themselves
-    if (
-      checkRole(user, ["employee", "project_manager"]) &&
-      emp_id !== user.id
-    ) {
-      return ErrorResponses.accessDenied();
+    // Validate required fields
+    const missingFields = validateRequiredFields(
+      { skill_id, proficiency_level },
+      ["skill_id", "proficiency_level"],
+    );
+    if (missingFields) {
+      return ErrorResponses.badRequest(missingFields);
     }
 
     // Check if skill already requested or approved
@@ -87,6 +89,53 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Get skill details and employee details for task description
+    const [skillDetails] = await db
+      .select({
+        skill_name: schema.skills.skill_name,
+      })
+      .from(schema.skills)
+      .where(eq(schema.skills.skill_id, skill_id));
+
+    const [employeeDetails] = await db
+      .select({
+        full_name: schema.employees.full_name,
+        employee_code: schema.employees.employee_code,
+      })
+      .from(schema.employees)
+      .where(eq(schema.employees.id, emp_id));
+
+    // Get all HR executives to assign the task
+    const hrExecutives = await db
+      .select({
+        id: schema.employees.id,
+      })
+      .from(schema.employees)
+      .where(
+        and(
+          eq(schema.employees.employee_role, "HR"),
+          eq(schema.employees.status, "ACTIVE"),
+        ),
+      );
+
+    // Create a task for each HR executive
+    const taskDescription = `Approve skill request: ${employeeDetails?.full_name || "Employee"} (${employeeDetails?.employee_code || emp_id}) requested "${skillDetails?.skill_name || skill_id}" at ${proficiency_level} proficiency level`;
+
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 7); // Due in 7 days
+
+    for (const hr of hrExecutives) {
+      await db.insert(schema.tasks).values({
+        owner_id: hr.id,
+        entity_type: "EMPLOYEE_SKILL",
+        entity_id: employeeSkill.id,
+        description: taskDescription,
+        due_on: dueDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
+        assigned_by: user.id,
+        status: "DUE",
+      });
+    }
+
     return successResponse(
       {
         id: employeeSkill.id,
@@ -95,6 +144,7 @@ export async function POST(req: NextRequest) {
         proficiency_level: employeeSkill.proficiency_level,
         status: "PENDING",
         created_at: employeeSkill.created_at,
+        message: `Skill request submitted. ${hrExecutives.length} approval task(s) created for HR.`,
       },
       201,
     );

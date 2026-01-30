@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { ProtectedRoute } from "@/components/protected-route";
@@ -226,7 +226,7 @@ function AuditContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-6 md:px-8 py-6">
           <div>
             <h1 className="text-3xl font-semibold">Audit Trail</h1>
             <p className="text-muted-foreground mt-1">
@@ -236,7 +236,7 @@ function AuditContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 md:px-8 py-8">
         <Card>
           <CardHeader>
             <CardTitle>System Audit Logs</CardTitle>
@@ -405,9 +405,8 @@ function AuditContent() {
                       </tr>
                     ) : (
                       auditLogs.map((log) => (
-                        <>
+                        <React.Fragment key={log.id}>
                           <tr
-                            key={log.id}
                             className="border-b hover:bg-muted/30 cursor-pointer"
                             onClick={() => toggleRowExpansion(log.id)}
                           >
@@ -469,7 +468,7 @@ function AuditContent() {
                               </td>
                             </tr>
                           )}
-                        </>
+                        </React.Fragment>
                       ))
                     )}
                   </tbody>

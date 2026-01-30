@@ -11,6 +11,7 @@ import {
   BarChart3,
   ScrollText,
   UserCog,
+  UserCircle,
 } from "lucide-react";
 
 export type NavItem = {
@@ -105,9 +106,9 @@ export const navConfig = {
 
   system: [
     {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings,
+      title: "Profile",
+      url: "/profile",
+      icon: UserCircle,
       roles: ["employee", "project_manager", "hr_executive"],
     },
   ],

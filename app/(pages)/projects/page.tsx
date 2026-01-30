@@ -102,12 +102,9 @@ function ProjectsListContent() {
   const fetchManagers = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-      const response = await fetch(
-        "/api/employees?limit=1000&role=project_manager",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const response = await fetch("/api/employees?limit=1000&role=PM", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -122,6 +119,12 @@ function ProjectsListContent() {
     try {
       setLoading(true);
       const token = localStorage.getItem("auth_token");
+
+      if (!token) {
+        toast.error("Authentication required");
+        return;
+      }
+
       const params = new URLSearchParams();
 
       if (statusFilter) params.append("status", statusFilter);
@@ -191,7 +194,7 @@ function ProjectsListContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-6 md:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-semibold">Projects</h1>
@@ -209,7 +212,7 @@ function ProjectsListContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 md:px-8 py-8">
         <Card>
           <CardHeader>
             <CardTitle>Projects List</CardTitle>
@@ -218,9 +221,10 @@ function ProjectsListContent() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="md:col-span-2 space-y-2">
+            {/* Filters - All in one line */}
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Search */}
+              <div className="flex-1 space-y-2">
                 <label className="text-sm font-medium">Search</label>
                 <div className="flex gap-2">
                   <Input
@@ -235,7 +239,8 @@ function ProjectsListContent() {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              {/* Status Filter */}
+              <div className="w-full md:w-48 space-y-2">
                 <label className="text-sm font-medium">Status</label>
                 <Select
                   value={statusFilter}
@@ -257,7 +262,8 @@ function ProjectsListContent() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              {/* Project Manager Filter */}
+              <div className="w-full md:w-64 space-y-2">
                 <label className="text-sm font-medium">Project Manager</label>
                 <Select
                   value={managerFilter}

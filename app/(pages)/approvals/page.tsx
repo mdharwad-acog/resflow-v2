@@ -298,7 +298,7 @@ function ApprovalsContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-6 md:px-8 py-6">
           <div>
             <h1 className="text-3xl font-semibold">Approvals</h1>
             <p className="text-muted-foreground mt-1">
@@ -310,7 +310,7 @@ function ApprovalsContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 md:px-8 py-8">
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}

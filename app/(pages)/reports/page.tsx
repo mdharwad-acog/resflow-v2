@@ -179,7 +179,7 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 md:p-8 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Reports</h1>
         <Link href="/reports/new">
@@ -215,23 +215,6 @@ export default function ReportsPage() {
                 </Select>
               </div>
             )}
-
-            <div className="space-y-2">
-              <Label htmlFor="type-filter">Report Type</Label>
-              <Select
-                value={reportTypeFilter}
-                onValueChange={setReportTypeFilter}
-              >
-                <SelectTrigger id="type-filter">
-                  <SelectValue placeholder="All types" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">All types</SelectItem>
-                  <SelectItem value="DAILY">Daily</SelectItem>
-                  <SelectItem value="WEEKLY">Weekly</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
             <div className="space-y-2">
               <Label htmlFor="start-date">Start Date</Label>

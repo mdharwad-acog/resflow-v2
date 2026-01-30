@@ -76,15 +76,22 @@ export default function NewReportPage() {
 
     try {
       setFetchingHours(true);
+      const token = localStorage.getItem("auth_token");
       const response = await fetch(
         `/api/logs?start_date=${formData.week_start_date}&end_date=${formData.week_end_date}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       if (!response.ok) {
         throw new Error("Failed to fetch logs");
       }
 
-      const logs = await response.json();
+      const data = await response.json();
+      const logs = data.logs || data || [];
 
       // Aggregate hours by project
       const hoursMap = new Map<string, ProjectHours>();
@@ -154,6 +161,16 @@ export default function NewReportPage() {
       if (!formData.week_end_date) {
         newErrors.week_end_date = "Week end date is required";
       }
+
+      // Check if weekly hours is 0
+      const totalHours = projectHours.reduce(
+        (sum, ph) => sum + ph.total_hours,
+        0,
+      );
+      if (totalHours === 0) {
+        newErrors.weekly_hours =
+          "You must log at least some hours before submitting a weekly report";
+      }
     }
 
     setErrors(newErrors);
@@ -194,9 +211,13 @@ export default function NewReportPage() {
           formData.report_type === "WEEKLY" ? weeklyHoursJson : null,
       };
 
+      const token = localStorage.getItem("auth_token");
       const response = await fetch("/api/reports", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
 
@@ -253,68 +274,21 @@ export default function NewReportPage() {
             <CardTitle>Report Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="report_type">
-                  Report Type <span className="text-destructive">*</span>
-                </Label>
-                <Select
-                  value={formData.report_type}
-                  onValueChange={handleReportTypeChange}
-                  disabled={loading}
-                >
-                  <SelectTrigger id="report_type">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="DAILY">Daily Report</SelectItem>
-                    <SelectItem value="WEEKLY">Weekly Report</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {formData.report_type === "DAILY" ? (
-                <div className="space-y-2">
-                  <Label htmlFor="report_date">
-                    Report Date <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="report_date"
-                    type="date"
-                    value={formData.report_date}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        report_date: e.target.value,
-                      }))
-                    }
-                    disabled={loading}
-                    max={new Date().toISOString().split("T")[0]}
-                  />
-                  {errors.report_date && (
-                    <p className="text-sm text-destructive">
-                      {errors.report_date}
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <Label htmlFor="week_start_date">
-                    Week Starting <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="week_start_date"
-                    type="date"
-                    value={formData.week_start_date}
-                    onChange={(e) => handleWeekChange(e.target.value)}
-                    disabled={loading}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Week: {format(new Date(formData.week_start_date), "MMM dd")}{" "}
-                    - {format(new Date(formData.week_end_date), "MMM dd, yyyy")}
-                  </p>
-                </div>
-              )}
+            <div className="space-y-2">
+              <Label htmlFor="week_start_date">
+                Week Starting <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="week_start_date"
+                type="date"
+                value={formData.week_start_date}
+                onChange={(e) => handleWeekChange(e.target.value)}
+                disabled={loading}
+              />
+              <p className="text-xs text-muted-foreground">
+                Week: {format(new Date(formData.week_start_date), "MMM dd")} -{" "}
+                {format(new Date(formData.week_end_date), "MMM dd, yyyy")}
+              </p>
             </div>
 
             <div className="space-y-2">
@@ -329,7 +303,8 @@ export default function NewReportPage() {
                 }
                 disabled={loading}
                 placeholder="Summarize your work this week, key accomplishments, challenges faced, and any blockers..."
-                rows={8}
+                rows={20}
+                className="min-h-[300px]"
               />
               {errors.content && (
                 <p className="text-sm text-destructive">{errors.content}</p>
@@ -403,6 +378,11 @@ export default function NewReportPage() {
                     Hours are automatically calculated from your daily work logs
                   </p>
                 </>
+              )}
+              {errors.weekly_hours && (
+                <p className="text-sm text-destructive mt-2">
+                  {errors.weekly_hours}
+                </p>
               )}
             </CardContent>
           </Card>

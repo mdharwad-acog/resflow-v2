@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { ProtectedRoute } from "@/components/protected-route";
 import {
@@ -16,6 +17,15 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoadingPage, LoadingSpinner } from "@/components/loading-spinner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import {
   AlertCircle,
@@ -23,6 +33,16 @@ import {
   User,
   Building2,
   Users,
+  Mail,
+  Briefcase,
+  MapPin,
+  Calendar,
+  GraduationCap,
+  FileText,
+  Pencil,
+  Percent,
+  Save,
+  X,
 } from "lucide-react";
 import { DepartmentsTab } from "@/components/settings/departments-tab";
 import { ClientsTab } from "@/components/settings/clients-tab";
@@ -39,6 +59,7 @@ interface UserProfile {
   employee_design: string;
   working_location: string;
   department_id: string;
+  department_name?: string;
   reporting_manager_id: string | null;
   reporting_manager_name: string | null;
   experience_years: number;
@@ -51,20 +72,49 @@ interface UserProfile {
   exited_on: string | null;
 }
 
-export default function SettingsPage() {
+interface Allocation {
+  id: string;
+  project_id: string;
+  project_code: string;
+  project_name: string;
+  role: string;
+  allocation_percentage: number;
+  is_billable: boolean;
+  start_date: string;
+  end_date?: string;
+  status: string;
+}
+
+interface Skill {
+  id: string;
+  skill_id: string;
+  skill_name: string;
+  department_name: string;
+  proficiency_level: string;
+  status: string;
+  approved_at?: string;
+}
+
+export default function ProfilePage() {
   return (
     <ProtectedRoute>
-      <SettingsContent />
+      <ProfileContent />
     </ProtectedRoute>
   );
 }
 
-function SettingsContent() {
+function ProfileContent() {
+  const router = useRouter();
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [allocations, setAllocations] = useState<Allocation[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [allocationsLoading, setAllocationsLoading] = useState(true);
+  const [skillsLoading, setSkillsLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
   // Editable fields
   const [resumeUrl, setResumeUrl] = useState("");
@@ -74,60 +124,90 @@ function SettingsContent() {
 
   // Fetch user profile
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("auth_token");
-        console.log("[Settings] Fetching profile...");
-        console.log("[Settings] Token exists:", !!token);
-
-        if (!token) {
-          console.error("[Settings] No auth token found");
-          setError("Not authenticated");
-          return;
-        }
-
-        console.log("[Settings] Making request to /api/auth/me");
-        const response = await fetch("/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        console.log("[Settings] Response status:", response.status);
-        console.log("[Settings] Response ok:", response.ok);
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("[Settings] Error response:", errorText);
-          throw new Error(
-            `Failed to fetch profile: ${response.status} - ${errorText}`,
-          );
-        }
-
-        const data = await response.json();
-        console.log("[Settings] Profile data received:", data);
-
-        const profileData = data.data || data;
-        console.log("[Settings] Extracted profile data:", profileData);
-
-        setProfile(profileData);
-        setResumeUrl(profileData.resume_url || "");
-        setCollege(profileData.college || "");
-        setDegree(profileData.degree || "");
-        setEducationalStream(profileData.educational_stream || "");
-
-        console.log("[Settings] Profile loaded successfully");
-      } catch (err) {
-        console.error("[Settings] Error fetching profile:", err);
-        setError(err instanceof Error ? err.message : "Failed to load profile");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProfile();
+    fetchAllocations();
+    fetchSkills();
   }, []);
 
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      setLoading(true);
+      setError("");
+
+      if (!token) {
+        setError("Not authenticated");
+        return;
+      }
+
+      const response = await fetch("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile");
+      }
+
+      const data = await response.json();
+      console.log("[Profile] User data:", data);
+
+      setProfile(data);
+      setResumeUrl(data.resume_url || "");
+      setCollege(data.college || "");
+      setDegree(data.degree || "");
+      setEducationalStream(data.educational_stream || "");
+    } catch (err) {
+      console.error("[Profile] Error:", err);
+      setError(err instanceof Error ? err.message : "Failed to load profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAllocations = async () => {
+    try {
+      setAllocationsLoading(true);
+      const token = localStorage.getItem("auth_token");
+
+      const response = await fetch(
+        `/api/allocations?employee_id=${user?.id}&limit=100`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setAllocations(data.allocations || []);
+      }
+    } catch (error) {
+      console.error("Error fetching allocations:", error);
+    } finally {
+      setAllocationsLoading(false);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      setSkillsLoading(true);
+      const token = localStorage.getItem("auth_token");
+
+      const response = await fetch(`/api/employee-skills?emp_id=${user?.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSkills(data.employee_skills || []);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    } finally {
+      setSkillsLoading(false);
+    }
+  };
   const handleSaveProfile = async () => {
     setSaving(true);
     setError("");
@@ -136,7 +216,6 @@ function SettingsContent() {
       const token = localStorage.getItem("auth_token");
       if (!token) {
         setError("Not authenticated");
-        setSaving(false);
         return;
       }
 
@@ -161,6 +240,8 @@ function SettingsContent() {
       }
 
       toast.success("Profile updated successfully");
+      setIsEditing(false);
+      fetchProfile(); // Refresh profile data
     } catch (err) {
       console.error("Error updating profile:", err);
       const errorMsg =
@@ -171,6 +252,27 @@ function SettingsContent() {
       setSaving(false);
     }
   };
+
+  const handleCancelEdit = () => {
+    // Reset to original values
+    setResumeUrl(profile?.resume_url || "");
+    setCollege(profile?.college || "");
+    setDegree(profile?.degree || "");
+    setEducationalStream(profile?.educational_stream || "");
+    setIsEditing(false);
+  };
+
+  // Separate allocations into current and past
+  const today = new Date();
+  const currentAllocations = allocations.filter((a) => {
+    const endDate = a.end_date ? new Date(a.end_date) : null;
+    return !endDate || endDate >= today;
+  });
+
+  const pastAllocations = allocations.filter((a) => {
+    const endDate = a.end_date ? new Date(a.end_date) : null;
+    return endDate && endDate < today;
+  });
 
   if (loading) {
     return <LoadingPage />;
@@ -192,31 +294,43 @@ function SettingsContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-semibold">Settings</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage your account settings and preferences
-          </p>
+        <div className="container mx-auto px-6 md:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-semibold">My Profile</h1>
+              <p className="text-muted-foreground mt-1">
+                View and manage your professional profile
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="profile" className="space-y-6">
+      <div className="container mx-auto px-6 md:px-8 py-8">
+        <Tabs defaultValue="overview" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="profile">
+            <TabsTrigger value="overview">
               <User className="h-4 w-4 mr-2" />
-              Profile
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="projects">
+              <Briefcase className="h-4 w-4 mr-2" />
+              Projects & Allocations
+            </TabsTrigger>
+            <TabsTrigger value="skills">
+              <GraduationCap className="h-4 w-4 mr-2" />
+              Skills
             </TabsTrigger>
             {user?.employee_role === "hr_executive" && (
               <>
-                <TabsTrigger value="departments">
+                <TabsContent value="departments">
                   <Building2 className="h-4 w-4 mr-2" />
                   Departments
-                </TabsTrigger>
-                <TabsTrigger value="clients">
+                </TabsContent>
+                <TabsContent value="clients">
                   <Users className="h-4 w-4 mr-2" />
                   Clients
-                </TabsTrigger>
+                </TabsContent>
               </>
             )}
           </TabsList>

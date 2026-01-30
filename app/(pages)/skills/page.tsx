@@ -31,13 +31,17 @@ import {
 import { PaginationControls } from "@/components/pagination-controls";
 import { EmptyState } from "@/components/empty-state";
 import { RequestSkillModal } from "@/components/forms/request-skill-modal";
+import { EditSkillModal } from "@/components/forms/edit-skill-modal";
+import { DeleteSkillDialog } from "@/components/forms/delete-skill-dialog";
 import { toast } from "sonner";
-import { Plus, Search, FileText } from "lucide-react";
+import { Plus, Search, FileText, Pencil, Trash2 } from "lucide-react";
 import { LoadingPage } from "@/components/loading-spinner";
 
 interface Skill {
   id: string;
+  skill_id: string;
   skill_name: string;
+  department_id: string;
   department_name: string;
   created_at: string;
 }
@@ -73,7 +77,11 @@ function SkillsContent() {
     string | undefined
   >(undefined);
   const [requestModalOpen, setRequestModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+
+  const isHR = user?.employee_role === "hr_executive";
 
   // Fetch departments only once
   useEffect(() => {
@@ -148,8 +156,28 @@ function SkillsContent() {
     setRequestModalOpen(true);
   };
 
+  const handleEditSkill = (e: React.MouseEvent, skill: Skill) => {
+    e.stopPropagation(); // Prevent row click
+    setSelectedSkill(skill);
+    setEditModalOpen(true);
+  };
+
+  const handleDeleteSkill = (e: React.MouseEvent, skill: Skill) => {
+    e.stopPropagation(); // Prevent row click
+    setSelectedSkill(skill);
+    setDeleteDialogOpen(true);
+  };
+
   const handleRequestSuccess = () => {
     toast.info("You can view your pending requests in the approvals section");
+    fetchSkills();
+  };
+
+  const handleEditSuccess = () => {
+    fetchSkills();
+  };
+
+  const handleDeleteSuccess = () => {
     fetchSkills();
   };
 
@@ -160,7 +188,7 @@ function SkillsContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-6 md:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-semibold">Skills Catalog</h1>
@@ -178,7 +206,7 @@ function SkillsContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 md:px-8 py-8">
         <Card>
           <CardHeader>
             <CardTitle>All Skills</CardTitle>
@@ -244,14 +272,17 @@ function SkillsContent() {
                         <TableHead>Skill Name</TableHead>
                         <TableHead>Department</TableHead>
                         <TableHead>Created At</TableHead>
+                        {isHR && (
+                          <TableHead className="w-24">Actions</TableHead>
+                        )}
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {skills.map((skill) => (
                         <TableRow
                           key={skill.id}
-                          className="cursor-pointer"
-                          onClick={() => handleRequestSkill(skill)}
+                          className="cursor-pointer hover:bg-muted/50"
+                          onClick={() => !isHR && handleRequestSkill(skill)}
                         >
                           <TableCell className="font-medium">
                             {skill.skill_name}
@@ -260,6 +291,28 @@ function SkillsContent() {
                           <TableCell>
                             {new Date(skill.created_at).toLocaleDateString()}
                           </TableCell>
+                          {isHR && (
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={(e) => handleEditSkill(e, skill)}
+                                  className="h-8 w-8"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={(e) => handleDeleteSkill(e, skill)}
+                                  className="h-8 w-8 text-destructive hover:text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          )}
                         </TableRow>
                       ))}
                     </TableBody>
@@ -284,6 +337,25 @@ function SkillsContent() {
         skill={selectedSkill}
         onSuccess={handleRequestSuccess}
       />
+
+      {isHR && (
+        <>
+          <EditSkillModal
+            open={editModalOpen}
+            onOpenChange={setEditModalOpen}
+            skill={selectedSkill}
+            departments={departments}
+            onSuccess={handleEditSuccess}
+          />
+
+          <DeleteSkillDialog
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
+            skill={selectedSkill}
+            onSuccess={handleDeleteSuccess}
+          />
+        </>
+      )}
     </div>
   );
 }

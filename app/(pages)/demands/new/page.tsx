@@ -28,6 +28,12 @@ interface Skill {
   skill_id: string;
   skill_name: string;
   skill_department: string;
+  department_name?: string;
+}
+
+interface Department {
+  id: string;
+  department_name: string;
 }
 
 interface DemandFormData {
@@ -35,6 +41,7 @@ interface DemandFormData {
   role_required: string;
   skill_ids: string[];
   start_date: string;
+  department_id: string | undefined;
 }
 
 interface FormErrors {
@@ -58,6 +65,7 @@ function CreateDemandContent() {
   const { user } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState<DemandFormData>({
@@ -65,6 +73,7 @@ function CreateDemandContent() {
     role_required: "",
     skill_ids: [],
     start_date: "",
+    department_id: undefined,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -74,33 +83,40 @@ function CreateDemandContent() {
 
   useEffect(() => {
     fetchProjects();
-    fetchSkills();
+    fetchDepartments();
   }, []);
+
+  // Fetch skills when department changes
+  useEffect(() => {
+    if (formData.department_id) {
+      fetchSkills(formData.department_id);
+    } else {
+      setSkills([]);
+    }
+    // Clear selected skills when department changes
+    setFormData((prev) => ({ ...prev, skill_ids: [] }));
+  }, [formData.department_id]);
 
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-      const response = await fetch("/api/projects", {
+      const params = new URLSearchParams();
+
+      // PM can only see their managed projects
+      if (isPM && user?.id) {
+        params.append("project_manager_id", user.id);
+        params.append("status", "ACTIVE");
+      } else if (isHR) {
+        params.append("status", "ACTIVE");
+      }
+
+      const response = await fetch(`/api/projects?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
         const data = await response.json();
-        let filteredProjects = data.projects || [];
-
-        // PM can only see their managed projects, HR sees all
-        if (isPM && user?.id) {
-          filteredProjects = filteredProjects.filter(
-            (p: Project) =>
-              p.project_manager_id === user.id && p.status === "active",
-          );
-        } else if (isHR) {
-          filteredProjects = filteredProjects.filter(
-            (p: Project) => p.status === "active",
-          );
-        }
-
-        setProjects(filteredProjects);
+        setProjects(data.projects || []);
       }
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -108,10 +124,35 @@ function CreateDemandContent() {
     }
   };
 
-  const fetchSkills = async () => {
+  const fetchDepartments = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-      const response = await fetch("/api/skills", {
+      const response = await fetch("/api/departments", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Map API response to expected format
+        const mappedDepartments = (data.departments || []).map((dept: any) => ({
+          id: dept.id,
+          department_name: dept.name,
+        }));
+        setDepartments(mappedDepartments);
+      }
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+      toast.error("Failed to load departments");
+    }
+  };
+
+  const fetchSkills = async (departmentId: string) => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      const params = new URLSearchParams();
+      params.append("department_id", departmentId);
+
+      const response = await fetch(`/api/skills?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -236,6 +277,7 @@ function CreateDemandContent() {
                   onChange={handleChange}
                   projects={projects}
                   skills={skills}
+                  departments={departments}
                   disabled={loading}
                 />
 

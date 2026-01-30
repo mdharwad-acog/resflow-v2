@@ -276,7 +276,7 @@ function EmployeesListContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-6 md:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-semibold">Employees</h1>
@@ -294,7 +294,7 @@ function EmployeesListContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 md:px-8 py-8">
         <Card>
           <CardHeader>
             <CardTitle>Employee Directory</CardTitle>

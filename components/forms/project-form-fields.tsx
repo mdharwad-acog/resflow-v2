@@ -177,29 +177,38 @@ export function ProjectFormFields({
               )}
             </div>
 
-            {isEdit && allowedStatuses.length > 0 && (
+            {isEdit && (
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={formData.status || undefined}
                   onValueChange={(value) => onChange("status", value)}
-                  disabled={disabled}
+                  disabled={disabled || allowedStatuses.length === 0}
                 >
                   <SelectTrigger id="status">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {allowedStatuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status.replace("_", " ")}
+                    {allowedStatuses.length > 0 ? (
+                      allowedStatuses.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status.replace("_", " ")}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value={formData.status || "DRAFT"} disabled>
+                        {formData.status?.replace("_", " ") ||
+                          "No transitions available"}
                       </SelectItem>
-                    ))}
+                    )}
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  {isPM
-                    ? "Limited status transitions available"
-                    : "All transitions available"}
+                  {allowedStatuses.length === 0
+                    ? "No status transitions available"
+                    : isPM
+                      ? "Limited status transitions available"
+                      : "All transitions available"}
                 </p>
               </div>
             )}
@@ -220,7 +229,8 @@ export function ProjectFormFields({
               onChange={(e) => onChange("short_description", e.target.value)}
               disabled={disabled}
               placeholder="Brief description of the project"
-              rows={2}
+              rows={3}
+              className="resize-none"
             />
             <p className="text-xs text-muted-foreground">
               A brief one-line description (optional)
@@ -235,7 +245,8 @@ export function ProjectFormFields({
               onChange={(e) => onChange("long_description", e.target.value)}
               disabled={disabled}
               placeholder="Detailed description of the project"
-              rows={4}
+              rows={6}
+              className="resize-none"
             />
             <p className="text-xs text-muted-foreground">
               Detailed project description (optional)

@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DataTable, Column } from "@/components/data-table";
+import { ProjectCombobox } from "@/components/project-combobox";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Calendar, Clock } from "lucide-react";
 import { LoadingSpinner } from "@/components/loading-spinner";
@@ -51,12 +52,6 @@ interface WorkLog {
   locked: boolean;
 }
 
-interface Project {
-  id: string;
-  project_code: string;
-  project_name: string;
-}
-
 export default function LogsPage() {
   return (
     <ProtectedRoute>
@@ -69,7 +64,6 @@ function LogsContent() {
   const router = useRouter();
   const { user } = useAuth();
   const [logs, setLogs] = useState<WorkLog[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -78,9 +72,10 @@ function LogsContent() {
   // Filters
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedProject, setSelectedProject] = useState<string>("");
+  const [selectedProject, setSelectedProject] = useState<string>("ALL");
 
   const isHR = user?.employee_role === "hr_executive";
+  const isPM = user?.employee_role === "project_manager";
 
   useEffect(() => {
     // Set default date range (last 30 days)
@@ -90,8 +85,6 @@ function LogsContent() {
 
     setEndDate(today.toISOString().split("T")[0]);
     setStartDate(thirtyDaysAgo.toISOString().split("T")[0]);
-
-    fetchProjects();
   }, []);
 
   useEffect(() => {
@@ -99,22 +92,6 @@ function LogsContent() {
       fetchLogs();
     }
   }, [startDate, endDate, selectedProject]);
-
-  const fetchProjects = async () => {
-    try {
-      const token = localStorage.getItem("auth_token");
-      const response = await fetch("/api/projects", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setProjects(data.projects || []);
-      }
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-    }
-  };
 
   const fetchLogs = async () => {
     try {
@@ -215,8 +192,8 @@ function LogsContent() {
     },
   ];
 
-  // Add employee column for HR
-  if (isHR) {
+  // Add employee column for HR and PM
+  if (isHR || isPM) {
     columns.push({
       key: "employee",
       header: "Employee",
@@ -304,7 +281,7 @@ function LogsContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-6 md:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-semibold">Work Logs</h1>
@@ -322,7 +299,7 @@ function LogsContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 md:px-8 py-8">
         <Card>
           <CardHeader>
             <CardTitle>Filter Logs</CardTitle>
@@ -357,22 +334,12 @@ function LogsContent() {
 
               <div className="space-y-2">
                 <Label htmlFor="project">Project (Optional)</Label>
-                <Select
+                <ProjectCombobox
                   value={selectedProject}
                   onValueChange={setSelectedProject}
-                >
-                  <SelectTrigger id="project">
-                    <SelectValue placeholder="All projects" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ALL">All projects</SelectItem>
-                    {projects.map((project) => (
-                      <SelectItem key={project.id} value={project.id}>
-                        {project.project_code} - {project.project_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="All projects"
+                  className="w-full"
+                />
               </div>
             </div>
           </CardContent>
